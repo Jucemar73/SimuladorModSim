@@ -1,6 +1,11 @@
 package gui;
 
-public class Janela 
-{
+import javax.swing.JFrame;
 
+public class Janela extends JFrame
+{
+	public Janela()
+	{
+		
+	}
 }

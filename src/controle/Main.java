@@ -5,6 +5,7 @@ public class Main
 	public static void main(String[] args) 
 	{
 		System.out.println("Iniciando...");
-		System.out.println("Encerrando...");
+		Controle controle = new Controle();
+		controle.iniciar();
 	}
 }
