@@ -6,6 +6,6 @@ public class Main
 	{
 		System.out.println("Iniciando...");
 		Controle controle = new Controle();
-		controle.iniciar();
+		controle.iniciarJanela();
 	}
 }
