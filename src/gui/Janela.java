@@ -7,6 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controle.Controle;
 
@@ -22,7 +23,27 @@ public class Janela extends JFrame
 	// Botões
 	
 	private JButton iniciar;
+	private JButton voltar;
+	private JButton info;
 	private JButton sair;
+	
+	// Etiquetas
+	
+	private JLabel descricao;
+	
+	private String textoDescricao()
+	{
+        String texto =    "<html> &nbsp&nbsp&nbsp INE5425 - Modelagem & Simulação - Trabalho I<br/>"
+        				+ "<html> &nbsp&nbsp&nbsp <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp 2017/2<br/>"
+        				+ "<html> &nbsp&nbsp&nbsp <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp Alunos:<br/>"
+        				+ "<html> &nbsp&nbsp&nbsp <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp Gustavo José Carpeggiani<br/>"
+        				+ "<html> &nbsp&nbsp&nbsp Marcello da Silva Klingelfus Junior <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp <br/>";
+		return texto;
+	}
 	
 	public Janela(Controle controle)
 	{
@@ -55,6 +76,31 @@ public class Janela extends JFrame
 		iniciar.setOpaque(false);
 		iniciar.addActionListener(new TratadorIniciar(this));
 		
+		voltar = new JButton("Voltar");
+		voltar.setToolTipText("Retorna ao menu principal.");
+		voltar.setFont(this.fonte);
+		voltar.setForeground(this.corTexto);
+		voltar.setBounds(20, 20, 180, 80);
+		voltar.setFocusPainted(false);
+		voltar.setMargin(new Insets(0, 0, 0, 0));
+		voltar.setContentAreaFilled(false);
+		voltar.setBorderPainted(this.bordasLigadas);
+		voltar.setOpaque(false);
+		voltar.addActionListener(new TratadorVoltar(this));
+		voltar.setVisible(false);
+		
+		info = new JButton("Info");
+		info.setToolTipText("Informações sobre este trabalho.");
+		info.setFont(this.fonte);
+		info.setForeground(this.corTexto);
+		info.setBounds(20, 220, 180, 80);
+		info.setFocusPainted(false);
+		info.setMargin(new Insets(0, 0, 0, 0));
+		info.setContentAreaFilled(false);
+		info.setBorderPainted(this.bordasLigadas);
+		info.setOpaque(false);
+		info.addActionListener(new TratadorInfo(this));
+		
 		sair = new JButton("Sair");
 		sair.setToolTipText("Sai do programa.");
 		sair.setFont(this.fonte);
@@ -68,18 +114,58 @@ public class Janela extends JFrame
 		sair.addActionListener(new TratadorSair(this));
 		
 		container.add(iniciar);
+		container.add(voltar);
+		container.add(info);
 		container.add(sair);
-
+		
+		// Criação dos labels da interface
+		
+		descricao = new JLabel(this.textoDescricao());
+		descricao.setFont(this.fonte);
+		descricao.setForeground(Color.BLACK);
+		descricao.setBounds(0, 0, 800, 600);
+		descricao.setVisible(false);
+		
+		container.add(descricao);
+		
 		setVisible(true);
 	}
 	
 	public void iniciar()
 	{
+		this.voltar.setVisible(true);
+		
+		this.iniciar.setVisible(false);
+		this.info.setVisible(false);
+		this.sair.setVisible(false);
+		
 		this.controle.iniciar();
+	}
+	
+	public void voltar() 
+	{
+		this.voltar.setVisible(false);
+		this.descricao.setVisible(false);
+		
+		this.iniciar.setVisible(true);
+		this.info.setVisible(true);
+		this.sair.setVisible(true);
+	}
+	
+	public void mostreInfo()
+	{
+		this.voltar.setVisible(true);
+		this.descricao.setVisible(true);
+		
+		this.iniciar.setVisible(false);
+		this.info.setVisible(false);
+		this.sair.setVisible(false);
 	}
 	
 	public void sair()
 	{
 		this.controle.sair();
 	}
+
+
 }
