@@ -1,5 +1,9 @@
-Simulador de propósito geral para a disciplina de Modelagem e Simulação.
+# Simulador de dois servidores com duas filas
 
-2017.2
+## UFSC - INE5425 - 2017.2
 
-*WIP*
+### Developed by [@gjcarpe](https://github.com/gjcarpe), [@Jucemar73](https://github.com/Jucemar73).
+
+Java implementation of a server simulation with two rows.
+
+Text, code and documentation in Brazilian Portuguese.
