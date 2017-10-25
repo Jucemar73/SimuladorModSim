@@ -3,10 +3,10 @@ package modelo;
 public class Calculador {
 
 
-	public double probExponencial(double det) {
-		// TODO Auto-generated method stub
-		return det;
-	}
+	public double probExponencial(double media) {
+		  double rand = Math.random();
+		  return  Math.log(1-rand)/(-media);
+		 }
 
 	public double probTriangular(double min,double med, double max) {
 		  // TODO Auto-generated method stub
@@ -19,15 +19,13 @@ public class Calculador {
 		     }
 		 }
 
-	public double probUniforme(double det, double seed) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public double probUniforme(double min, double max) {
+		  double rand = Math.random();
+		  return min+rand*(max-min);
+		 }
 
-	public double probNormal(double det, double dp) {
-		return det+dp;
-	}
-
-	
-	
+	public double probNormal(double media, double dp) {
+		  double rand = Math.random();
+		  return (rand-media)/dp;
+		 }
 }
