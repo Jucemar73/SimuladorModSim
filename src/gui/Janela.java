@@ -20,40 +20,61 @@ public class Janela extends JFrame
 	private Container container;
 	private Controle controle;
 	
-	// Botıes
+	// Bot√µes
 	
 	private JButton iniciar;
 	private JButton voltar;
 	private JButton info;
 	private JButton sair;
 	
+	private JButton playPause;
+	private JButton restart;
+	
 	// Etiquetas
 	
 	private JLabel descricao;
 	
+	// M√©todos privados
+	
 	private String textoDescricao()
 	{
-        String texto =    "<html> &nbsp&nbsp&nbsp INE5425 - Modelagem & SimulaÁ„o - Trabalho I<br/>"
+        String texto =    "<html> &nbsp&nbsp&nbsp INE5425 - Modelagem & Simula√ß√£o - Trabalho I<br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>"
         				+ "<html> &nbsp&nbsp&nbsp 2017/2<br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>"
         				+ "<html> &nbsp&nbsp&nbsp Alunos:<br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>"
-        				+ "<html> &nbsp&nbsp&nbsp Gustavo JosÈ Carpeggiani<br/>"
+        				+ "<html> &nbsp&nbsp&nbsp Gustavo Jos√© Carpeggiani<br/>"
         				+ "<html> &nbsp&nbsp&nbsp Marcello da Silva Klingelfus Junior <br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>";
 		return texto;
 	}
 	
+	private void atualizaPlayPause()
+	{
+		String texto = this.playPause.getText();
+		if(texto.equals("‚ñ∫"))
+			this.playPause.setText("||");
+		else
+			this.playPause.setText("‚ñ∫");
+	}
+	
+	private void reiniciaSimulacao() 
+	{
+		this.playPause.setText("‚ñ∫");
+	}
+	
+	// Construtor
+	
 	public Janela(Controle controle)
 	{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setTitle("Trabalho I - Modelagem & SimulaÁ„o");
+		this.setTitle("Trabalho I - Modelagem & Simula√ß√£o");
 		this.setSize(800, 600);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
-		// Par‚metros de controle
+		// Par√¢metros de controle
 		
 		this.controle = controle;
 		this.corTexto = Color.RED;
@@ -62,10 +83,10 @@ public class Janela extends JFrame
 		this.container = this.getContentPane();
 		this.container.setLayout(null);
 		
-		// CriaÁ„o dos botıes da interface
+		// Cria√ß√£o dos bot√µes da interface
 		
 		iniciar = new JButton("Iniciar");
-		iniciar.setToolTipText("Inicia a simulaÁ„o.");
+		iniciar.setToolTipText("Inicia a simula√ß√£o.");
 		iniciar.setFont(this.fonte);
 		iniciar.setForeground(this.corTexto);
 		iniciar.setBounds(20, 20, 180, 80);
@@ -75,6 +96,7 @@ public class Janela extends JFrame
 		iniciar.setBorderPainted(this.bordasLigadas);
 		iniciar.setOpaque(false);
 		iniciar.addActionListener(new TratadorIniciar(this));
+		iniciar.addMouseListener(new ListenerMousePassou(this.corTexto, iniciar));
 		
 		voltar = new JButton("Voltar");
 		voltar.setToolTipText("Retorna ao menu principal.");
@@ -88,9 +110,10 @@ public class Janela extends JFrame
 		voltar.setOpaque(false);
 		voltar.addActionListener(new TratadorVoltar(this));
 		voltar.setVisible(false);
+		voltar.addMouseListener(new ListenerMousePassou(this.corTexto, voltar));
 		
 		info = new JButton("Info");
-		info.setToolTipText("InformaÁıes sobre este trabalho.");
+		info.setToolTipText("Informa√ß√µes sobre este trabalho.");
 		info.setFont(this.fonte);
 		info.setForeground(this.corTexto);
 		info.setBounds(20, 220, 180, 80);
@@ -100,6 +123,7 @@ public class Janela extends JFrame
 		info.setBorderPainted(this.bordasLigadas);
 		info.setOpaque(false);
 		info.addActionListener(new TratadorInfo(this));
+		info.addMouseListener(new ListenerMousePassou(this.corTexto, info));
 		
 		sair = new JButton("Sair");
 		sair.setToolTipText("Sai do programa.");
@@ -112,13 +136,44 @@ public class Janela extends JFrame
 		sair.setBorderPainted(this.bordasLigadas);
 		sair.setOpaque(false);
 		sair.addActionListener(new TratadorSair(this));
+		sair.addMouseListener(new ListenerMousePassou(this.corTexto, sair));
+		
+		playPause = new JButton("‚ñ∫");
+		playPause.setToolTipText("Play");
+		playPause.setFont(this.fonte);
+		playPause.setForeground(this.corTexto);
+		playPause.setBounds(100, 150, 50, 50);
+		playPause.setFocusPainted(false);
+		playPause.setMargin(new Insets(0, 0, 0, 0));
+		playPause.setContentAreaFilled(false);
+		playPause.setBorderPainted(this.bordasLigadas);
+		playPause.setOpaque(false);
+		playPause.addActionListener(new TratadorPlayPause(this));
+		playPause.setVisible(false);
+		playPause.addMouseListener(new ListenerMousePassou(this.corTexto, playPause));
+		
+		restart = new JButton("‚Üê"); 
+		restart.setToolTipText("Reiniciar");
+		restart.setFont(this.fonte);
+		restart.setForeground(this.corTexto);
+		restart.setBounds(50, 150, 50, 50);
+		restart.setFocusPainted(false);
+		restart.setMargin(new Insets(0, 0, 0, 0));
+		restart.setContentAreaFilled(false);
+		restart.setBorderPainted(this.bordasLigadas);
+		restart.setOpaque(false);
+		restart.addActionListener(new TratadorRestart(this));
+		restart.setVisible(false);
+		restart.addMouseListener(new ListenerMousePassou(this.corTexto, restart));
 		
 		container.add(iniciar);
 		container.add(voltar);
 		container.add(info);
 		container.add(sair);
+		container.add(playPause);
+		container.add(restart);
 		
-		// CriaÁ„o dos labels da interface
+		// Cria√ß√£o dos labels da interface
 		
 		descricao = new JLabel(this.textoDescricao());
 		descricao.setFont(this.fonte);
@@ -131,9 +186,18 @@ public class Janela extends JFrame
 		setVisible(true);
 	}
 	
+	// M√©todos p√∫blicos
+	
+	public Color getCorTexto()
+	{
+		return this.corTexto;
+	}
+	
 	public void iniciar()
 	{
 		this.voltar.setVisible(true);
+		this.playPause.setVisible(true);
+		this.restart.setVisible(true);
 		
 		this.iniciar.setVisible(false);
 		this.info.setVisible(false);
@@ -146,12 +210,17 @@ public class Janela extends JFrame
 	{
 		this.voltar.setVisible(false);
 		this.descricao.setVisible(false);
+		this.playPause.setVisible(false);
+		this.restart.setVisible(false);
 		
 		this.iniciar.setVisible(true);
 		this.info.setVisible(true);
 		this.sair.setVisible(true);
+		
+		this.reiniciaSimulacao(); // Reinicia a interface de simula√ß√£o
+		this.restart(); // Quando volta ao menu principal reinicia
 	}
-	
+
 	public void mostreInfo()
 	{
 		this.voltar.setVisible(true);
@@ -167,5 +236,15 @@ public class Janela extends JFrame
 		this.controle.sair();
 	}
 
+	public void playPause() 
+	{
+		this.atualizaPlayPause();
+		this.controle.playPause();
+	}
 
+	public void restart() 
+	{
+		this.controle.restart();
+	}
+	
 }

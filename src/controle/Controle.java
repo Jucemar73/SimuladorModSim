@@ -31,12 +31,22 @@ public class Controle
 	
 	public void iniciar()
 	{
-		// TODO Ligar execução do programa com interface
+		// TODO
 	}
 	
 	public void sair()
 	{
 		System.out.println("Encerrando...");
 		System.exit(0);
+	}
+
+	public void playPause()
+	{
+		// TODO
+	}
+
+	public void restart() 
+	{
+		// TODO reestabelecer estado inicial
 	}
 }
