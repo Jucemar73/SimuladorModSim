@@ -1,9 +1,4 @@
 package modelo;
 
-public class Evento 
-{
-	public Evento()
-	{
-		
-	}
+public class Evento {
 }

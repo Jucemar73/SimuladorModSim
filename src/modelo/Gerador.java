@@ -1,36 +1,17 @@
 package modelo;
-import java.util.Random;
+
+import modelo.Calculador;
+import modelo.Entidade;
 
 public class Gerador {
+    private Calculador calculador = new Calculador();
 
-	private Calculador calculador;
-	
-	public Gerador(){
-	this.calculador = new Calculador();
-	}
-	
-	public Entidade geraEntidade(double seed,int mode, double det){
-		int tipo = 1;
-		if(seed >= 0.5){
-			tipo = 2;
-		}
-		double ts;
-		if(mode == 0){
-			ts = det*100;
-		}
-		else if(mode == 1){
-			ts = this.calculador.probNormal(det,seed);
-		}
-		else if(mode == 2){
-			ts =  this.calculador.probUniforme(det,seed);
-		}
-		else if(mode == 3){
-			ts =  this.calculador.probTriangular((det-seed), seed,(det+seed));
-		}
-		else{
-			ts =  this.calculador.probExponencial(det);
-		}
-		return new Entidade(tipo, ts);
-	}	
-
+    public Entidade geraEntidade(int mode, double op1, double op2, double op3) {
+        int tipo = 1;
+        if (Math.random() >= 0.5) {
+            tipo = 2;
+        }
+        double ts = mode == 0 ? op1 * 100.0 : (mode == 1 ? this.calculador.probNormal(op1, op2) : (mode == 2 ? this.calculador.probUniforme(op1, op2) : (mode == 3 ? this.calculador.probTriangular(op1, op2, op3) : this.calculador.probExponencial(op1))));
+        return new Entidade(tipo, ts);
+    }
 }

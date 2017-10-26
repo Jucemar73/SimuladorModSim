@@ -1,76 +1,80 @@
 package modelo;
 
 import java.util.ArrayList;
+import modelo.Entidade;
 
-public class Servidor 
-{
-	boolean ocupado, ativo;
-	private ArrayList<Entidade> filaServidor;
-	double processTime, timeOut;
-	
-	public Servidor(){
+public class Servidor {
+    boolean ocupado = false;
+    boolean ativo = true;
+    private ArrayList<Entidade> filaServidor = new ArrayList();
+    double processTime;
+    double timeOut;
+    private ArrayList<Integer> estadosFila = new ArrayList();
 
-	this.ocupado = false;
-	this.ativo = true;
-	this.filaServidor = new ArrayList<Entidade>();
-	}
+    public boolean retornaOcupado() {
+        return this.ocupado;
+    }
 
-	public boolean retornaOcupado(){
-		return ocupado;	
-	}
-	public boolean retornaAtivo(){
-		return ativo;
-	}
-	public void setOcupado(boolean ocupado){
-		this.ocupado = ocupado;
-	}
-	public void setAtivo(boolean ativo){
-		this.ativo = ativo;
-	}
-	public void addToQueue(Entidade entidade){
-		this.filaServidor.add(entidade);
-	}
-	
-	////////////////////
-	public void assingProcess(Entidade entidade){
-		if(this.retornaOcupado() == false){
-			this.processTime = entidade.retornaTs();
-			this.setOcupado(true);
-		}
-	}
-	
-	public void newArrival(Entidade entidade){
-		if(this.filaServidor.size() == 0 && retornaOcupado() == false){
-			assingProcess(entidade);
-		}
-		else{
-			addToQueue(entidade);
-		}
-	}
-	
-	public void process(){
-		if(this.processTime>0){
-			this.processTime -=1;
-			if(this.processTime == 0){
-				this.setOcupado(ocupado);
-			}
-		}
-		else if(this.filaServidor.size() == 0){
-			assingProcess(this.filaServidor.remove(0));
-		}
-	}
-	////////////////////
-	public void setTimeOut(double tempo){
-		this.timeOut = tempo;
-		this.setAtivo(false);
-	}
-	public void tryRecover(){
-		this.timeOut -=1;
-		if(this.timeOut <= 0){
-			this.setAtivo(true);
-		}
-	}
-	
-	
-	
+    public boolean retornaAtivo() {
+        return this.ativo;
+    }
+
+    public void setOcupado(boolean ocupado) {
+        this.ocupado = ocupado;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public void addToQueue(Entidade entidade) {
+        this.filaServidor.add(entidade);
+    }
+
+    public int getSizeFila() {
+        return this.filaServidor.size();
+    }
+
+    public ArrayList<Integer> returnaEstadosFila() {
+        return this.estadosFila;
+    }
+
+    public void assingProcess(Entidade entidade) {
+        if (!this.retornaOcupado()) {
+            this.processTime = entidade.retornaTs();
+            this.setOcupado(true);
+        }
+    }
+
+    public void newArrival(Entidade entidade) {
+        if (this.filaServidor.size() == 0 && !this.retornaOcupado()) {
+            this.assingProcess(entidade);
+        } else {
+            this.addToQueue(entidade);
+        }
+    }
+
+    public void process() {
+        if (this.processTime > 0.0) {
+            this.processTime -= 1.0;
+            if (this.processTime == 0.0) {
+                this.setOcupado(this.ocupado);
+            }
+        } else if (this.filaServidor.size() == 0) {
+            this.assingProcess(this.filaServidor.remove(0));
+        }
+        this.estadosFila.add(this.filaServidor.size());
+    }
+
+    public void setTimeOut(double tempo) {
+        this.timeOut = tempo;
+        this.setAtivo(false);
+    }
+
+    public void tryRecover() {
+        this.timeOut -= 1.0;
+        if (this.timeOut <= 0.0) {
+            this.setAtivo(true);
+        }
+    }
 }
