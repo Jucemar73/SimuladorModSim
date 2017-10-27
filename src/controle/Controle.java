@@ -36,9 +36,17 @@ public class Controle
 		System.out.println("Objeto simulador criado.");
 	}
 	
-	public void playPause()
+	public void playPause(boolean pausa)
 	{
-		// TODO lógica no modelo, caso tenha pause
+		if(pausa)
+		{
+			// TODO lógica pause
+		}
+		else // Se não pausado
+		{
+			this.simulador.iniciarSimulacao();
+		}
+			
 	}
 	
 	public void restart() 
@@ -55,27 +63,90 @@ public class Controle
 
 	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lógica o modo de TEC
 	{
-		// TODO lógica no modelo
+		this.simulador.setModoTec(numFuncao);
 	}
 	
 	public void definaFuncaoEstatisticaTs(int numFuncao) // Seta na lógica o modo de TS
 	{
-		// TODO lógica no modelo
+		this.simulador.setModoTs(numFuncao);
 	}
 	
 	public void definaFuncaoEstatisticaTef(int numFuncao) // Seta na lógica o modo de TEF
 	{
-		// TODO lógica no modelo
+		this.simulador.setModoTef(numFuncao);
 	}
 	
-	public void definaFuncaoEstatisticaTc(int numFuncao) // Seta na lógica o modo de TC
+	public void definaFuncaoEstatisticaTf(int numFuncao) // Seta na lógica o modo de TF
 	{
-		// TODO lógica no modelo
+		this.simulador.setModoTf(numFuncao);
 	}
 	
 	public void definaUnidadeTempo(int numUnidadeTempo) // 0 para seg, 1 para min, 2 para horas
 	{
-		// TODO lógica no modelo
+		this.simulador.setUnidadeTempo(numUnidadeTempo);
+	}
+	
+	public void definaParametroTec(String texto)
+	{
+		try 
+		{
+			this.simulador.setParametroTec(texto);
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Valor inválido inserido no parâmetro TEC!");
+		}
+	}
+
+	public void definaParametroTs(String texto) 
+	{
+		try 
+		{
+			this.simulador.setParametroTs(texto);
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Valor inválido inserido no parâmetro TS!");
+		}
+		
+	}
+
+	public void definaParametroTef(String texto) 
+	{
+		try 
+		{
+			this.simulador.setParametroTef(texto);
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Valor inválido inserido no parâmetro TEF!");
+		}
+		
+	}
+
+	public void definaParametroTf(String texto) 
+	{
+		try 
+		{
+			this.simulador.setParametroTf(texto);
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Valor inválido inserido no parâmetro TF!");
+		}
+		
+	}
+
+	public void definaParametroTempo(String texto)
+	{
+		try 
+		{
+			this.simulador.setTempoFinal(Integer.parseInt(texto));
+		} 
+		catch (Exception e) 
+		{
+			System.err.println("Valor inválido inserido no parâmetro de tempo!");
+		}
 	}
 
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas) 

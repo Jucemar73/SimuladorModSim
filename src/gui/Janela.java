@@ -35,7 +35,7 @@ public class Janela extends JFrame
 	private JButton funcaoEstatisticaTec;
 	private JButton funcaoEstatisticaTs;
 	private JButton funcaoEstatisticaTef;
-	private JButton funcaoEstatisticaTc;
+	private JButton funcaoEstatisticaTf;
 	
 	private JButton unidadeTempo;
 	
@@ -44,13 +44,16 @@ public class Janela extends JFrame
 	private JLabel descricao;
 	private JLabel estatisticas;
 	private JLabel tituloSelecaoFuncoes;
+	private JLabel tituloSelecaoTempo;
 	
 	// TextField
 	
 	private JTextField campoTec;
 	private JTextField campoTs;
 	private JTextField campoTef;
-	private JTextField campoTc;
+	private JTextField campoTf;
+	
+	private JTextField campoTempo;
 	
 	// Estatísticas
 	
@@ -78,15 +81,20 @@ public class Janela extends JFrame
 	private int numFuncaoEstatisticaTec;
 	private int numFuncaoEstatisticaTs;
 	private int numFuncaoEstatisticaTef;
-	private int numFuncaoEstatisticaTc;
+	private int numFuncaoEstatisticaTf;
 	
 	private int numUnidadeTempo;
 	
+	private boolean pausa;
+	
 	// Métodos privados
 	
-	private String textoDescricao()
+	private String definaTextoDescricao()
 	{
-        String texto =    "<html> &nbsp&nbsp&nbsp INE5425 - Modelagem & Simulação - Trabalho I<br/>"
+        String texto =    "<html> &nbsp&nbsp&nbsp UFSC - Universidade Federal de Santa Catarina <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp INE5425 - Modelagem & Simulação <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp <br/>"
+        				+ "<html> &nbsp&nbsp&nbsp Trabalho I - Simulador de 2 servidores com 2 filas<br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>"
         				+ "<html> &nbsp&nbsp&nbsp 2017/2<br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>"
@@ -95,6 +103,33 @@ public class Janela extends JFrame
         				+ "<html> &nbsp&nbsp&nbsp Gustavo José Carpeggiani<br/>"
         				+ "<html> &nbsp&nbsp&nbsp Marcello da Silva Klingelfus Junior <br/>"
         				+ "<html> &nbsp&nbsp&nbsp <br/>";
+		return texto;
+	}
+	
+	private String definaTextoTituloSelecaoFuncoes() 
+	{
+		String texto = "<html> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MODO"
+					+ " TEC &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
+					+ "&nbsp&nbsp MODO TS &nbsp&nbsp&nbsp&"
+					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
+					+ "nbsp&nbsp MODO TEF &nbsp&nbsp&nbsp&nbsp&"
+					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
+					+ "nbsp&nbsp MODO TC <br/>";
+		return texto;
+	}
+	
+	private String definaTextoTituloSelecaoTempo() 
+	{
+		String texto = "<html> &nbsp&nbsp&nbsp&nbsp TEMPO </br>";
 		return texto;
 	}
 	
@@ -116,8 +151,8 @@ public class Janela extends JFrame
         		
         		+ "<html> &nbsp&nbsp&nbsp Taxa média de ocupação do servidor 1: " + this.tmos1 + " <br/>"
         		+ "<html> &nbsp&nbsp&nbsp Taxa média de ocupação do servidor 2: " + this.tmos2 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp Tempo médio de uma Entidade na fila 1: " + this.tmef1 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp Tempo médio de uma Entidade na fila 2: " + this.tmef2 + " <br/>"
+        		+ "<html> &nbsp&nbsp&nbsp Tempo médio de uma entidade na fila 1: " + this.tmef1 + " <br/>"
+        		+ "<html> &nbsp&nbsp&nbsp Tempo médio de uma entidade na fila 2: " + this.tmef2 + " <br/>"
         		
         		+ "<html> &nbsp&nbsp&nbsp Tempo de falha 1: " + this.tf1 + " <br/>"
         		+ "<html> &nbsp&nbsp&nbsp Tempo de falha 2: " + this.tf2 + " <br/>"
@@ -149,40 +184,22 @@ public class Janela extends JFrame
 		this.numFuncaoEstatisticaTec = -1;
 		this.numFuncaoEstatisticaTs = -1;
 		this.numFuncaoEstatisticaTef = -1;
-		this.numFuncaoEstatisticaTc = -1;
+		this.numFuncaoEstatisticaTf = -1;
 		this.numUnidadeTempo = -1;
+		this.pausa = true;
 		this.funcaoEstatisticaTec.setText("Modo estatístico");
 		this.funcaoEstatisticaTs.setText("Modo estatístico");
 		this.funcaoEstatisticaTef.setText("Modo estatístico");
-		this.funcaoEstatisticaTc.setText("Modo estatístico");
+		this.funcaoEstatisticaTf.setText("Modo estatístico");
 		this.unidadeTempo.setText("Unidade temporal");
 		
 		this.campoTec.setText("");
 		this.campoTs.setText("");
 		this.campoTef.setText("");
-		this.campoTc.setText("");
+		this.campoTf.setText("");
+		this.campoTempo.setText("");
 	}
 	
-	private String definaTextoTituloSelecaoFuncoes() 
-	{
-		String texto = "<html> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MODO"
-					+ " TEC &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
-					+ "&nbsp&nbsp MODO TS &nbsp&nbsp&nbsp&"
-					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
-					+ "nbsp&nbsp MODO TEF &nbsp&nbsp&nbsp&nbsp&"
-					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
-					+ "nbsp&nbsp MODO TC <br/>";
-		return texto;
-	}
 	// Construtor
 	
 	public Janela(Controle controle)
@@ -198,7 +215,6 @@ public class Janela extends JFrame
 		this.tf2 = 0;
 		this.mp1 = 0;
 		this.mp2 = 0;
-		
 		this.tmes = 0;
 		this.ce = 0;
 		this.nf = 0;
@@ -207,9 +223,11 @@ public class Janela extends JFrame
 		this.numFuncaoEstatisticaTec = -1;
 		this.numFuncaoEstatisticaTs = -1;
 		this.numFuncaoEstatisticaTef = -1;
-		this.numFuncaoEstatisticaTc = -1;
+		this.numFuncaoEstatisticaTf = -1;
 		
 		this.numUnidadeTempo = -1;
+		
+		this.pausa = true;
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Trabalho I - Modelagem & Simulação");
@@ -351,19 +369,19 @@ public class Janela extends JFrame
 		funcaoEstatisticaTef.setVisible(false);
 		funcaoEstatisticaTef.addMouseListener(new ListenerMousePassou(this.corTexto, funcaoEstatisticaTef));
 		
-		funcaoEstatisticaTc = new JButton("Modo estatístico");
-		funcaoEstatisticaTc.setToolTipText("Clique para selecionar a função estatística para TC");
-		funcaoEstatisticaTc.setFont(new Font("Arial", Font.PLAIN, 18));
-		funcaoEstatisticaTc.setForeground(this.corTexto);
-		funcaoEstatisticaTc.setBounds(640, 20, 140, 80);
-		funcaoEstatisticaTc.setFocusPainted(false);
-		funcaoEstatisticaTc.setMargin(new Insets(0, 0, 0, 0));
-		funcaoEstatisticaTc.setContentAreaFilled(false);
-		funcaoEstatisticaTc.setBorderPainted(this.bordasLigadas);
-		funcaoEstatisticaTc.setOpaque(false);
-		funcaoEstatisticaTc.addActionListener(new TratadorSelecionarFuncao(this, 3)); // 3 para TC
-		funcaoEstatisticaTc.setVisible(false);
-		funcaoEstatisticaTc.addMouseListener(new ListenerMousePassou(this.corTexto, funcaoEstatisticaTc));
+		funcaoEstatisticaTf = new JButton("Modo estatístico");
+		funcaoEstatisticaTf.setToolTipText("Clique para selecionar a função estatística para TF");
+		funcaoEstatisticaTf.setFont(new Font("Arial", Font.PLAIN, 18));
+		funcaoEstatisticaTf.setForeground(this.corTexto);
+		funcaoEstatisticaTf.setBounds(640, 20, 140, 80);
+		funcaoEstatisticaTf.setFocusPainted(false);
+		funcaoEstatisticaTf.setMargin(new Insets(0, 0, 0, 0));
+		funcaoEstatisticaTf.setContentAreaFilled(false);
+		funcaoEstatisticaTf.setBorderPainted(this.bordasLigadas);
+		funcaoEstatisticaTf.setOpaque(false);
+		funcaoEstatisticaTf.addActionListener(new TratadorSelecionarFuncao(this, 3)); // 3 para TC
+		funcaoEstatisticaTf.setVisible(false);
+		funcaoEstatisticaTf.addMouseListener(new ListenerMousePassou(this.corTexto, funcaoEstatisticaTf));
 		
 		unidadeTempo = new JButton("Unidade temporal");
 		unidadeTempo.setToolTipText("Clique para selecionar a unidade de tempo da simulação.");
@@ -388,19 +406,19 @@ public class Janela extends JFrame
 		container.add(funcaoEstatisticaTec);
 		container.add(funcaoEstatisticaTs);
 		container.add(funcaoEstatisticaTef);
-		container.add(funcaoEstatisticaTc);
+		container.add(funcaoEstatisticaTf);
 		container.add(unidadeTempo);
 		
 		// Criação dos labels da interface
 		
-		descricao = new JLabel(this.textoDescricao());
+		descricao = new JLabel(this.definaTextoDescricao());
 		descricao.setFont(this.fonte);
 		descricao.setForeground(Color.BLACK);
 		descricao.setBounds(0, 0, 800, 600);
 		descricao.setVisible(false);
 		
 		estatisticas = new JLabel();
-		this.atualizaTextoEstatisticas();
+		this.atualizaTextoEstatisticas(); // TODO Tirar isso? Talvez
 		estatisticas.setFont(new Font("Arial", Font.PLAIN, 18));
 		estatisticas.setForeground(Color.BLACK);
 		estatisticas.setBounds(0, 0, 800, 600);
@@ -412,40 +430,59 @@ public class Janela extends JFrame
 		tituloSelecaoFuncoes.setBounds(0, 0, 800, 20);
 		tituloSelecaoFuncoes.setVisible(false);
 		
+		tituloSelecaoTempo = new JLabel(this.definaTextoTituloSelecaoTempo());
+		tituloSelecaoTempo.setFont(new Font("Arial", Font.PLAIN, 16));
+		tituloSelecaoTempo.setForeground(Color.BLACK);
+		tituloSelecaoTempo.setBounds(600, 280, 200, 20);
+		tituloSelecaoTempo.setVisible(false);
+		
 		container.add(descricao);
 		container.add(estatisticas);
 		container.add(tituloSelecaoFuncoes);
+		container.add(tituloSelecaoTempo);
 		
-		// Criação dos text fields // TODO Tratadores
+		// Criação dos text fields
 		
-		campoTec = new JTextField(5);
-		campoTec.setToolTipText("Digite aqui os parâmetros.");
+		campoTec = new JTextField();
+		campoTec.setToolTipText("Digite aqui os parâmetros de TEC.");
 		campoTec.setForeground(Color.BLACK);
 		campoTec.setBounds(275, 100, 40, 20);
 		campoTec.setVisible(false);
+		campoTec.addKeyListener(new ListenerTecladoDefinaValor(this, 0));
 		
-		campoTs = new JTextField(5);
-		campoTs.setToolTipText("Digite aqui os parâmetros.");
+		campoTs = new JTextField();
+		campoTs.setToolTipText("Digite aqui os parâmetros de TS.");
 		campoTs.setForeground(Color.BLACK);
 		campoTs.setBounds(415, 100, 40, 20);
 		campoTs.setVisible(false);
+		campoTs.addKeyListener(new ListenerTecladoDefinaValor(this, 1));
 		
-		campoTef = new JTextField(5);
-		campoTef.setToolTipText("Digite aqui os parâmetros.");
+		campoTef = new JTextField();
+		campoTef.setToolTipText("Digite aqui os parâmetros de TEF.");
 		campoTef.setForeground(Color.BLACK);
 		campoTef.setBounds(555, 100, 40, 20);
 		campoTef.setVisible(false);
+		campoTef.addKeyListener(new ListenerTecladoDefinaValor(this, 2));
 		
-		campoTc = new JTextField(5);
-		campoTc.setToolTipText("Digite aqui os parâmetros.");
-		campoTc.setForeground(Color.BLACK);
-		campoTc.setBounds(695, 100, 40, 20);
-		campoTc.setVisible(false);
+		campoTf = new JTextField();
+		campoTf.setToolTipText("Digite aqui os parâmetros de TF.");
+		campoTf.setForeground(Color.BLACK);
+		campoTf.setBounds(695, 100, 40, 20);
+		campoTf.setVisible(false);
+		campoTf.addKeyListener(new ListenerTecladoDefinaValor(this, 3));
+		
+		campoTempo = new JTextField();
+		campoTempo.setToolTipText("Digite aqui o valor do tempo para simulação.");
+		campoTempo.setForeground(Color.BLACK);
+		campoTempo.setBounds(635, 400, 40, 20);
+		campoTempo.setVisible(false);
+		campoTempo.addKeyListener(new ListenerTecladoTempo(this));
 		
 		container.add(campoTec);
 		container.add(campoTs);
 		container.add(campoTef);
-		container.add(campoTc);
+		container.add(campoTf);
+		container.add(campoTempo);
 				
 		setVisible(true);
 	}
@@ -464,16 +501,18 @@ public class Janela extends JFrame
 		this.restart.setVisible(true);
 		this.estatisticas.setVisible(true);
 		this.tituloSelecaoFuncoes.setVisible(true);
+		this.tituloSelecaoTempo.setVisible(true);
 		this.funcaoEstatisticaTec.setVisible(true);
 		this.funcaoEstatisticaTs.setVisible(true);
 		this.funcaoEstatisticaTef.setVisible(true);
-		this.funcaoEstatisticaTc.setVisible(true);
+		this.funcaoEstatisticaTf.setVisible(true);
 		this.unidadeTempo.setVisible(true);
 		
-		this.campoTec.setVisible(false); 
-		this.campoTs.setVisible(false); 
-		this.campoTef.setVisible(false); // // TODO parser para cada tipo de função , criar tratadores
-		this.campoTc.setVisible(false);
+		this.campoTec.setVisible(true); 
+		this.campoTs.setVisible(true); 
+		this.campoTef.setVisible(true);
+		this.campoTf.setVisible(true);
+		this.campoTempo.setVisible(true);
 		
 		this.iniciar.setVisible(false);
 		this.info.setVisible(false);
@@ -488,18 +527,20 @@ public class Janela extends JFrame
 		this.descricao.setVisible(false);
 		this.estatisticas.setVisible(false);
 		this.tituloSelecaoFuncoes.setVisible(false);
+		this.tituloSelecaoTempo.setVisible(false);
 		this.playPause.setVisible(false);
 		this.restart.setVisible(false);
 		this.funcaoEstatisticaTec.setVisible(false);
 		this.funcaoEstatisticaTs.setVisible(false);
 		this.funcaoEstatisticaTef.setVisible(false);
-		this.funcaoEstatisticaTc.setVisible(false);
+		this.funcaoEstatisticaTf.setVisible(false);
 		this.unidadeTempo.setVisible(false);
 		
 		this.campoTec.setVisible(false); 
 		this.campoTs.setVisible(false);
 		this.campoTef.setVisible(false);
-		this.campoTc.setVisible(false);
+		this.campoTf.setVisible(false);
+		this.campoTempo.setVisible(false);
 		
 		this.iniciar.setVisible(true);
 		this.info.setVisible(true);
@@ -525,8 +566,10 @@ public class Janela extends JFrame
 
 	public void playPause() 
 	{
+		this.pausa = !pausa;
+		System.out.println(pausa);
 		this.atualizaPlayPause();
-		this.controle.playPause();
+		this.controle.playPause(pausa);
 	}
 
 	public void restart() 
@@ -549,6 +592,7 @@ public class Janela extends JFrame
 		this.mp1 = estatisticas.get(9);
 		this.mp2 = estatisticas.get(10);
 		
+		// TODO outras estatísticas no modelo
 		this.tmes = estatisticas.get(11);
 		this.ce = estatisticas.get(12);
 		this.nf = estatisticas.get(13);
@@ -558,7 +602,7 @@ public class Janela extends JFrame
 		this.atualizaTextoEstatisticas();
 	}
 
-	public void altereFuncaoEstatistica(int numBotao) // 0 para TEC, 1 para TS, 2 para TEF, 3 para TC
+	public void selecionarFuncaoEstatistica(int numBotao) // 0 para TEC, 1 para TS, 2 para TEF, 3 para TF
 	{
 		if(numBotao == 0)
 		{
@@ -655,37 +699,48 @@ public class Janela extends JFrame
 		}
 		if(numBotao == 3)
 		{
-			this.numFuncaoEstatisticaTc++;
-			if(this.numFuncaoEstatisticaTc > 4)
-				this.numFuncaoEstatisticaTc = 0;
-			if(this.numFuncaoEstatisticaTc == 0)
+			this.numFuncaoEstatisticaTf++;
+			if(this.numFuncaoEstatisticaTf > 4)
+				this.numFuncaoEstatisticaTf = 0;
+			if(this.numFuncaoEstatisticaTf == 0)
 			{
-				this.funcaoEstatisticaTc.setText("Constante");
-				this.controle.definaFuncaoEstatisticaTc(this.numFuncaoEstatisticaTc);
+				this.funcaoEstatisticaTf.setText("Constante");
+				this.controle.definaFuncaoEstatisticaTf(this.numFuncaoEstatisticaTf);
 			}
-			if(this.numFuncaoEstatisticaTc == 1)
+			if(this.numFuncaoEstatisticaTf == 1)
 			{
-				this.funcaoEstatisticaTc.setText("Exponencial");
-				this.controle.definaFuncaoEstatisticaTc(this.numFuncaoEstatisticaTc);
+				this.funcaoEstatisticaTf.setText("Exponencial");
+				this.controle.definaFuncaoEstatisticaTf(this.numFuncaoEstatisticaTf);
 			}
-			if(this.numFuncaoEstatisticaTc == 2)
+			if(this.numFuncaoEstatisticaTf == 2)
 			{
-				this.funcaoEstatisticaTc.setText("Normal");
-				this.controle.definaFuncaoEstatisticaTc(this.numFuncaoEstatisticaTc);
+				this.funcaoEstatisticaTf.setText("Normal");
+				this.controle.definaFuncaoEstatisticaTf(this.numFuncaoEstatisticaTf);
 			}
-			if(this.numFuncaoEstatisticaTc == 3)
+			if(this.numFuncaoEstatisticaTf == 3)
 			{
-				this.funcaoEstatisticaTc.setText("Triangular");
-				this.controle.definaFuncaoEstatisticaTc(this.numFuncaoEstatisticaTc);
+				this.funcaoEstatisticaTf.setText("Triangular");
+				this.controle.definaFuncaoEstatisticaTf(this.numFuncaoEstatisticaTf);
 			}
-			if(this.numFuncaoEstatisticaTc == 4)
+			if(this.numFuncaoEstatisticaTf == 4)
 			{
-				this.funcaoEstatisticaTc.setText("Uniforme");
-				this.controle.definaFuncaoEstatisticaTc(this.numFuncaoEstatisticaTc);
+				this.funcaoEstatisticaTf.setText("Uniforme");
+				this.controle.definaFuncaoEstatisticaTf(this.numFuncaoEstatisticaTf);
 			}
 		}
 	}
 
+	public void definaParametroEstatistico(int num) // 0 para TEC, 1 para TS, 2 para TEF, 3 para TC
+	{
+		if(num == 0) // TEC
+			this.controle.definaParametroTec(this.campoTec.getText());
+		if(num == 1) // TS
+			this.controle.definaParametroTs(this.campoTs.getText());
+		if(num == 2) // TEF
+			this.controle.definaParametroTef(this.campoTef.getText());
+		if(num == 3) // TF
+			this.controle.definaParametroTf(this.campoTf.getText());
+	}
 	
 	public void selecionarTempo() 
 	{
@@ -710,5 +765,11 @@ public class Janela extends JFrame
 			this.controle.definaUnidadeTempo(this.numUnidadeTempo);
 		}
 	}
+
+	public void definaParametroTempo() 
+	{
+		this.controle.definaParametroTempo(this.campoTempo.getText()); // Manda a string para ser lida
+	}
+
 	
 }

@@ -15,6 +15,8 @@ public class Simulador {
     
     private Controle controle;
     
+    private int unidadeDeTempo; // 0 para seg, 1 para min, 2 para horas
+    
     private int tempoTotal;
     private int tempoFinal;
     
@@ -74,7 +76,8 @@ public class Simulador {
     private double op2Ent;
     private double op3Ent;
     
-    // TODO setar parâmetros do construtor adequadamente para realização da simulação
+    // Construtor
+    
     public Simulador(Controle controle) { 
         serv1 = new Servidor();
         serv2 = new Servidor();
@@ -116,10 +119,10 @@ public class Simulador {
         numeroTrocas1 = 0;
         numeroTrocas2 = 0;
         
-        modeGerador = 0;
-        modeArrival = 0;
-        modeEmFalha = 0;
-        modeParaFalha = 0;
+        modeArrival = 0; // TEC
+        modeGerador = 0; // TS
+        modeEmFalha = 0; // TEF
+        modeParaFalha = 0; // TF
         
         nextArrivalTime = 0;
         nextFailureTime1 = 0;
@@ -131,19 +134,22 @@ public class Simulador {
         op2Arr = 0;
         op3Arr = 0;
         
-        op1EmFalha = 0;
-        op2EmFalha = 0;
-        op3EmFalha = 0;
+        op1Ent = 0;
+        op2Ent = 0;
+        op3Ent = 0;
         
         op1ParaFalha = 0;
         op2ParaFalha = 0;
         op3ParaFalha = 0;
         
-        op1Ent = 0;
-        op2Ent = 0;
-        op3Ent = 0;
+        op1EmFalha = 0;
+        op2EmFalha = 0;
+        op3EmFalha = 0;
+        
     }
 
+    // Gets
+    
     public Servidor getServ1() {
         return this.serv1;
     }
@@ -151,11 +157,204 @@ public class Simulador {
     public Servidor getServ2() {
         return this.serv2;
     }
+    
+    // Sets
+    
+    public void setUnidadeTempo(int unidade)
+    {
+    	this.unidadeDeTempo = unidade;
+    }
+    
+    public void setTempoFinal(int t)
+    {
+    	if(this.unidadeDeTempo == 0) // segundos
+        	this.tempoFinal = t;
+    	
+    	if(this.unidadeDeTempo == 1) // minutos
+    		this.tempoFinal = (t * 60);
+    	
+    	if(this.unidadeDeTempo == 2) // horas
+    		this.tempoFinal = (t * 3600);
+    	
+    	System.out.println("TEMPO FINAL DEFINIDO: " + this.tempoFinal);
+    }
+    
+	public void setModoTec(int modo)
+	{
+		this.modeArrival = modo;
+		
+		System.out.println("MODO TEC DEFINIDO: " + modo);
+	}
 
+	public void setModoTs(int modo)
+	{
+		this.modeGerador = modo;
+		
+		System.out.println("MODO TS DEFINIDO: " + modo);
+	}
+
+	public void setModoTef(int modo)
+	{
+		this.modeEmFalha = modo;
+		
+		System.out.println("MODO TEF DEFINIDO: " + modo);
+	}
+
+	public void setModoTf(int modo)
+	{
+		this.modeParaFalha = modo;
+		
+		System.out.println("MODO TF DEFINIDO: " + modo);
+	}
+
+	public void setParametroTec(String texto)
+	{
+		double par0 = 0;
+		double par1 = 0;
+		double par2 = 0;
+		int cont = 0;
+		String temp = "";
+
+		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+			par0 = Integer.parseInt(texto);
+		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		{
+			for(int i = 0; i < texto.length(); i++)
+			{
+				if(!(texto.charAt(i) == ',')) // Se não é vírgula
+					temp += texto.charAt(i);
+				else // Caso seja vírgula reseta
+				{
+					if(cont == 0)
+						par0 = Double.parseDouble(temp);
+					if(cont == 1)
+						par1 = Double.parseDouble(temp);
+					if(cont == 2)
+						par2 = Double.parseDouble(temp);
+					temp = "";
+				}
+			}
+		}
+		
+		this.op1Arr = par0;
+		this.op2Arr = par1;
+		this.op3Arr = par2;
+		
+		System.out.println("PARÂMETROS TEC: " + par0 + ", " + par1 + ", " + par2);
+	}
+
+	public void setParametroTs(String texto)
+	{
+		double par0 = 0;
+		double par1 = 0;
+		double par2 = 0;
+		int cont = 0;
+		String temp = "";
+
+		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+			par0 = Integer.parseInt(texto);
+		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		{
+			for(int i = 0; i < texto.length(); i++)
+			{
+				if(!(texto.charAt(i) == ',')) // Se não é vírgula
+					temp += texto.charAt(i);
+				else // Caso seja vírgula reseta
+				{
+					if(cont == 0)
+						par0 = Double.parseDouble(temp);
+					if(cont == 1)
+						par1 = Double.parseDouble(temp);
+					if(cont == 2)
+						par2 = Double.parseDouble(temp);
+					temp = "";
+				}
+			}
+		}
+		
+		this.op1Ent = par0;
+		this.op2Ent = par1;
+		this.op3Ent = par2;
+		
+		System.out.println("PARÂMETROS TS: " + par0 + ", " + par1 + ", " + par2);
+	}
+
+	public void setParametroTef(String texto)
+	{
+		double par0 = 0;
+		double par1 = 0;
+		double par2 = 0;
+		int cont = 0;
+		String temp = "";
+
+		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+			par0 = Integer.parseInt(texto);
+		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		{
+			for(int i = 0; i < texto.length(); i++)
+			{
+				if(!(texto.charAt(i) == ',')) // Se não é vírgula
+					temp += texto.charAt(i);
+				else // Caso seja vírgula reseta
+				{
+					if(cont == 0)
+						par0 = Double.parseDouble(temp);
+					if(cont == 1)
+						par1 = Double.parseDouble(temp);
+					if(cont == 2)
+						par2 = Double.parseDouble(temp);
+					temp = "";
+				}
+			}
+		}
+		
+		this.op1ParaFalha = par0;
+		this.op2ParaFalha = par1;
+		this.op3ParaFalha = par2;
+		
+		System.out.println("PARÂMETROS TEF: " + par0 + ", " + par1 + ", " + par2);
+	}
+
+	public void setParametroTf(String texto) 
+	{
+		double par0 = 0;
+		double par1 = 0;
+		double par2 = 0;
+		int cont = 0;
+		String temp = "";
+
+		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+			par0 = Integer.parseInt(texto);
+		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		{
+			for(int i = 0; i < texto.length(); i++)
+			{
+				if(!(texto.charAt(i) == ',')) // Se não é vírgula
+					temp += texto.charAt(i);
+				else // Caso seja vírgula reseta
+				{
+					if(cont == 0)
+						par0 = Double.parseDouble(temp);
+					if(cont == 1)
+						par1 = Double.parseDouble(temp);
+					if(cont == 2)
+						par2 = Double.parseDouble(temp);
+					temp = "";
+				}
+			}
+		}
+		
+		this.op1EmFalha = par0;
+		this.op2EmFalha = par1;
+		this.op3EmFalha = par2;
+		
+		System.out.println("PARÂMETROS TF: " + par0 + ", " + par1 + ", " + par2);
+	}
+    
+    // Outros métodos
 
     public void iniciarSimulacao() {
-    	// TODO Com base nos parâmetros selecionados via parâmetro no construtor
-    	// this.simulacao();
+    	 this.simulacao();
     }
 
     public void simulacao() {
@@ -210,7 +409,8 @@ public class Simulador {
             } else {
                 ++this.tempoFalha1;
             }
-            this.atualizaEstatisticas();
+            if(this.tempoTotal != 0)
+            	this.atualizaEstatisticas();
         }
     }
 
@@ -230,20 +430,18 @@ public class Simulador {
         }
     }
 
-    public double geraTempo(int mode, double op1, double op2, double op3) {
-        if (mode == 0) {
+    public double geraTempo(int mode, double op1, double op2, double op3) 
+    {
+        if (mode == 0) 
             return this.tempoFinal + 10;
-        }
-        if (mode == 1) {
-            return (double)this.tempoFinal + this.calculador.probNormal(op1, op2);
-        }
-        if (mode == 2) {
-            return (double)this.tempoFinal + this.calculador.probUniforme(op1, op2);
-        }
-        if (mode == 3) {
+        if (mode == 1) 
+            return (double)this.tempoFinal + this.calculador.probExponencial(op1);
+        if (mode == 2) 
+        	return (double)this.tempoFinal + this.calculador.probNormal(op1, op2);
+        if (mode == 3) 
             return (double)this.tempoFinal + this.calculador.probTriangular(op1, op2, op3);
-        }
-        return (double)this.tempoFinal + this.calculador.probExponencial(op1);
+        
+        return (double)this.tempoFinal + this.calculador.probUniforme(op1, op2);
     }
 
     public void atualizaEstatisticas() {
@@ -254,7 +452,6 @@ public class Simulador {
         Double d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2);
         Double d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal);
         Double d6 = this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoTotal);
-        
         Double d7 = this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoTotal);
         Double d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal);
         Double d9 = this.mediaPonderada(this.serv1.returnaEstadosFila());
@@ -273,11 +470,14 @@ public class Simulador {
     	estatisticas.add(d8); // tf2
     	estatisticas.add(d9); // mp1
     	estatisticas.add(d10); // mp2
-    	// tmes
-    	// ce
-    	// nf
-    	// nts
-    	// eb
+    	
+    	// TODO Adicionar as outras ao array
+    	
+    	// TODO tmes: tempo medio entidade no sistema
+    	// TODO ce: contador entidades
+    	// TODO nf: num falhas
+    	// TODO nts: num trocas servidor
+    	// TODO neb: num entidades bloqueadas
     	
     	this.controle.atualizaEstatisticas(estatisticas);
     }

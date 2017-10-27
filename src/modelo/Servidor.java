@@ -56,13 +56,18 @@ public class Servidor {
         }
     }
 
-    public void process() {
-        if (this.processTime > 0.0) {
+    public void process() 
+    {
+        if (this.processTime > 0.0) 
+        {
             this.processTime -= 1.0;
-            if (this.processTime == 0.0) {
+            if (this.processTime == 0.0) 
+            {
                 this.setOcupado(this.ocupado);
             }
-        } else if (this.filaServidor.size() == 0) {
+        } 
+        else if (this.filaServidor.size() != 0) 
+        {
             this.assingProcess(this.filaServidor.remove(0));
         }
         this.estadosFila.add(this.filaServidor.size());

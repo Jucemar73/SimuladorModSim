@@ -17,6 +17,6 @@ public class TratadorSelecionarFuncao implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent arg0) 
 	{
-		this.pai.altereFuncaoEstatistica(this.num);
+		this.pai.selecionarFuncaoEstatistica(this.num);
 	}
 }
