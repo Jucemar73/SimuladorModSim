@@ -16,7 +16,7 @@ public class ListenerMousePassou implements MouseListener
 	{
 		this.botao = botao;
 		this.corTexto = corTexto;
-		this.corBrilho = Color.YELLOW;
+		this.corBrilho = Color.MAGENTA;
 	}
 	
 	@Override

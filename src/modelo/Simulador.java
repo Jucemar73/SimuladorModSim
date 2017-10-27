@@ -7,53 +7,123 @@ import modelo.Gerador;
 import modelo.Servidor;
 
 public class Simulador {
-    private Servidor serv1 = new Servidor();
-    private Servidor serv2 = new Servidor();
+	
+    private Servidor serv1;
+    private Servidor serv2;
+    
     private Gerador gerador;
     private Calculador calculador;
     private Entidade entidadeNova;
+    
     private int tempoTotal;
     private int tempoFinal;
+    
     private int tempoFila1;
     private int tempoFila2;
+    
     private int tempoOcupado1;
     private int tempoOcupado2;
+    
     private int tempoAtivo1;
     private int tempoAtivo2;
+    
     private int tempoFalha1;
     private int tempoFalha2;
+    
     private int tempoEmFila1;
     private int tempoEmFila2;
+    
     private int tempoMedioEmFilaTotal;
+    
     private int totalEmFila1;
     private int totalEmFila2;
+    
     private int tempoSistema1;
-    private int tempoSitema2;
+    private int tempoSistema2;
+    
     private int numeroEntidades1;
     private int numeroEntidades2;
+    
     private int numeroTrocas1;
     private int numeroTrocas2;
+    
     private int modeGerador;
     private int modeArrival;
     private int modeEmFalha;
     private int modeParaFalha;
+    
     private int nextArrivalTime;
     private int nextFailureTime1;
     private int nextFailureTime2;
     private int nextWakeTime1;
     private int nextWakeTime2;
+    
     private double op1Arr;
     private double op2Arr;
     private double op3Arr;
+    
     private double op1EmFalha;
     private double op2EmFalha;
     private double op3EmFalha;
+    
     private double op1ParaFalha;
     private double op2ParaFalha;
     private double op3ParaFalha;
+    
     private double op1Ent;
     private double op2Ent;
     private double op3Ent;
+    
+    // TODO setar parâmetros do construtor adequadamente para realização da simulação
+    public Simulador() { 
+        serv1 = new Servidor();
+        serv2 = new Servidor();
+        gerador = new Gerador();
+        calculador = new Calculador();
+        entidadeNova = null;
+        tempoTotal = 0;
+        tempoFinal = 0;
+        tempoFila1 = 0;
+        tempoFila2 = 0;
+        tempoOcupado1 = 0;
+        tempoOcupado2 = 0;
+        tempoAtivo1 = 0;
+        tempoAtivo2 = 0;
+        tempoFalha1 = 0;
+        tempoFalha2 = 0;
+        tempoEmFila1 = 0;
+        tempoEmFila2 = 0;
+        tempoMedioEmFilaTotal = 0;
+        totalEmFila1 = 0;
+        totalEmFila2 = 0;
+        tempoSistema1 = 0;
+        tempoSistema2 = 0;
+        numeroEntidades1 = 0;
+        numeroEntidades2 = 0;
+        numeroTrocas1 = 0;
+        numeroTrocas2 = 0;
+        modeGerador = 0;
+        modeArrival = 0;
+        modeEmFalha = 0;
+        modeParaFalha = 0;
+        nextArrivalTime = 0;
+        nextFailureTime1 = 0;
+        nextFailureTime2 = 0;
+        nextWakeTime1 = 0;
+        nextWakeTime2 = 0;
+        op1Arr = 0;
+        op2Arr = 0;
+        op3Arr = 0;
+        op1EmFalha = 0;
+        op2EmFalha = 0;
+        op3EmFalha = 0;
+        op1ParaFalha = 0;
+        op2ParaFalha = 0;
+        op3ParaFalha = 0;
+        op1Ent = 0;
+        op2Ent = 0;
+        op3Ent = 0;
+    }
 
     public Servidor getServ1() {
         return this.serv1;
@@ -64,6 +134,8 @@ public class Simulador {
     }
 
     public void iniciarSimulacao() {
+    	// TODO Com base nos parâmetros selecionados via parâmetro no construtor
+    	// this.simulacao();
     }
 
     public void simulacao() {

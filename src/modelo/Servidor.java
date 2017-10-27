@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import modelo.Entidade;
 
 public class Servidor {
-    boolean ocupado = false;
-    boolean ativo = true;
-    private ArrayList<Entidade> filaServidor = new ArrayList();
-    double processTime;
-    double timeOut;
-    private ArrayList<Integer> estadosFila = new ArrayList();
+	
+    private boolean ocupado = false;
+    private boolean ativo = true;
+    private ArrayList<Entidade> filaServidor = new ArrayList<Entidade>();
+    private ArrayList<Integer> estadosFila = new ArrayList<Integer>();
+    private double processTime;
+    private double timeOut;
+
 
     public boolean retornaOcupado() {
         return this.ocupado;

@@ -31,7 +31,7 @@ public class Controle
 	
 	public void iniciar()
 	{
-		// TODO
+		// TODO lógica no modelo, iniciar a execução do programa
 	}
 	
 	public void sair()
@@ -42,11 +42,31 @@ public class Controle
 
 	public void playPause()
 	{
-		// TODO
+		// TODO lógica no modelo, caso tenha pause
 	}
 
 	public void restart() 
 	{
-		// TODO reestabelecer estado inicial
+		this.simulador = new Simulador(); // Recria o objeto
+	}
+
+	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lógica o modo de TEC
+	{
+		// TODO lógica no modelo
+	}
+	
+	public void definaFuncaoEstatisticaTs(int numFuncao) // Seta na lógica o modo de TS
+	{
+		// TODO lógica no modelo
+	}
+	
+	public void definaFuncaoEstatisticaTef(int numFuncao) // Seta na lógica o modo de TEF
+	{
+		// TODO lógica no modelo
+	}
+	
+	public void definaFuncaoEstatisticaTc(int numFuncao) // Seta na lógica o modo de TC
+	{
+		// TODO lógica no modelo
 	}
 }
