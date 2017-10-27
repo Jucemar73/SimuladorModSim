@@ -1,10 +1,8 @@
 package modelo;
 
 import java.util.ArrayList;
-import modelo.Calculador;
-import modelo.Entidade;
-import modelo.Gerador;
-import modelo.Servidor;
+
+import controle.Controle;
 
 public class Simulador {
 	
@@ -14,6 +12,8 @@ public class Simulador {
     private Gerador gerador;
     private Calculador calculador;
     private Entidade entidadeNova;
+    
+    private Controle controle;
     
     private int tempoTotal;
     private int tempoFinal;
@@ -75,51 +75,70 @@ public class Simulador {
     private double op3Ent;
     
     // TODO setar parâmetros do construtor adequadamente para realização da simulação
-    public Simulador() { 
+    public Simulador(Controle controle) { 
         serv1 = new Servidor();
         serv2 = new Servidor();
         gerador = new Gerador();
         calculador = new Calculador();
         entidadeNova = null;
+        
+        this.controle = controle;
+        
         tempoTotal = 0;
         tempoFinal = 0;
+        
         tempoFila1 = 0;
         tempoFila2 = 0;
+        
         tempoOcupado1 = 0;
         tempoOcupado2 = 0;
+        
         tempoAtivo1 = 0;
         tempoAtivo2 = 0;
+        
         tempoFalha1 = 0;
         tempoFalha2 = 0;
+        
         tempoEmFila1 = 0;
         tempoEmFila2 = 0;
+        
         tempoMedioEmFilaTotal = 0;
+        
         totalEmFila1 = 0;
         totalEmFila2 = 0;
+        
         tempoSistema1 = 0;
         tempoSistema2 = 0;
+        
         numeroEntidades1 = 0;
         numeroEntidades2 = 0;
+        
         numeroTrocas1 = 0;
         numeroTrocas2 = 0;
+        
         modeGerador = 0;
         modeArrival = 0;
         modeEmFalha = 0;
         modeParaFalha = 0;
+        
         nextArrivalTime = 0;
         nextFailureTime1 = 0;
         nextFailureTime2 = 0;
         nextWakeTime1 = 0;
         nextWakeTime2 = 0;
+        
         op1Arr = 0;
         op2Arr = 0;
         op3Arr = 0;
+        
         op1EmFalha = 0;
         op2EmFalha = 0;
         op3EmFalha = 0;
+        
         op1ParaFalha = 0;
         op2ParaFalha = 0;
         op3ParaFalha = 0;
+        
         op1Ent = 0;
         op2Ent = 0;
         op3Ent = 0;
@@ -132,6 +151,7 @@ public class Simulador {
     public Servidor getServ2() {
         return this.serv2;
     }
+
 
     public void iniciarSimulacao() {
     	// TODO Com base nos parâmetros selecionados via parâmetro no construtor
@@ -227,17 +247,39 @@ public class Simulador {
     }
 
     public void atualizaEstatisticas() {
-        this.calculador.numeroMedioFilas(this.totalEmFila1, this.tempoTotal);
-        this.calculador.numeroMedioFilas(this.totalEmFila2, this.tempoTotal);
-        this.calculador.numeroMedioFilas(this.totalEmFila1 + this.totalEmFila2, this.tempoTotal);
-        this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1);
-        this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2);
-        this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal);
-        this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoTotal);
-        this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoTotal);
-        this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal);
-        this.mediaPonderada(this.serv1.returnaEstadosFila());
-        this.mediaPonderada(this.serv2.returnaEstadosFila());
+        Double d0 = this.calculador.numeroMedioFilas(this.totalEmFila1, this.tempoTotal);
+        Double d1 = this.calculador.numeroMedioFilas(this.totalEmFila2, this.tempoTotal);
+        Double d2 = this.calculador.numeroMedioFilas(this.totalEmFila1 + this.totalEmFila2, this.tempoTotal);
+        Double d3 = this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1);
+        Double d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2);
+        Double d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal);
+        Double d6 = this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoTotal);
+        
+        Double d7 = this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoTotal);
+        Double d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal);
+        Double d9 = this.mediaPonderada(this.serv1.returnaEstadosFila());
+        Double d10 = this.mediaPonderada(this.serv2.returnaEstadosFila());
+        
+    	ArrayList<Double> estatisticas = new ArrayList<Double>();
+
+    	estatisticas.add(d0); // nmef1
+    	estatisticas.add(d1); // nmef2
+    	estatisticas.add(d2); // nmef total
+    	estatisticas.add(d3); // tmos1
+    	estatisticas.add(d4); // tmos2
+    	estatisticas.add(d5); // tmef1
+    	estatisticas.add(d6); // tmef2
+    	estatisticas.add(d7); // tf1
+    	estatisticas.add(d8); // tf2
+    	estatisticas.add(d9); // mp1
+    	estatisticas.add(d10); // mp2
+    	// tmes
+    	// ce
+    	// nf
+    	// nts
+    	// eb
+    	
+    	this.controle.atualizaEstatisticas(estatisticas);
     }
 
     public double mediaPonderada(ArrayList<Integer> lista) {

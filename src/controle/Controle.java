@@ -1,5 +1,7 @@
 package controle;
 
+import java.util.ArrayList;
+
 import gui.Janela;
 import modelo.Simulador;
 
@@ -10,7 +12,6 @@ public class Controle
 	
 	public Controle()
 	{
-		this.simulador = new Simulador();
 	}
 	
 	public Janela getJanela()
@@ -25,29 +26,31 @@ public class Controle
 	
 	public void iniciarJanela()
 	{
-		System.out.println("Janela inicializada.");
 		this.janela = new Janela(this);
+		System.out.println("Janela inicializada.");
 	}
 	
-	public void iniciar()
+	public void iniciarSimulador()
 	{
-		// TODO lógica no modelo, iniciar a execução do programa
+		this.simulador = new Simulador(this);
+		System.out.println("Objeto simulador criado.");
+	}
+	
+	public void playPause()
+	{
+		// TODO lógica no modelo, caso tenha pause
+	}
+	
+	public void restart() 
+	{
+		this.simulador = new Simulador(this); // Recria o objeto
+		System.out.println("Objeto simulador recriado.");
 	}
 	
 	public void sair()
 	{
 		System.out.println("Encerrando...");
 		System.exit(0);
-	}
-
-	public void playPause()
-	{
-		// TODO lógica no modelo, caso tenha pause
-	}
-
-	public void restart() 
-	{
-		this.simulador = new Simulador(); // Recria o objeto
 	}
 
 	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lógica o modo de TEC
@@ -69,4 +72,15 @@ public class Controle
 	{
 		// TODO lógica no modelo
 	}
+	
+	public void definaUnidadeTempo(int numUnidadeTempo) // 0 para seg, 1 para min, 2 para horas
+	{
+		// TODO lógica no modelo
+	}
+
+	public void atualizaEstatisticas(ArrayList<Double> estatisticas) 
+	{
+		this.janela.atualizaEstatisticas(estatisticas);
+	}
+
 }
