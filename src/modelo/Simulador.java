@@ -413,7 +413,7 @@ public class Simulador {
         if (this.tempoTotal <= this.tempoFinal) 
         {
             this.tempoTotal++;
-        
+            
             /*
             
             if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
@@ -480,11 +480,13 @@ public class Simulador {
             else
                 ++this.tempoFalha1;
             
-            */
+            
             this.tempoEmFila1 += this.serv1.getSizeFila();
             this.tempoEmFila2 += this.serv2.getSizeFila();
             this.serv1.atualizaListaEstados();
             this.serv2.atualizaListaEstados();
+            
+            */
             
             this.atualizaEstatisticas();
             
@@ -548,48 +550,49 @@ public class Simulador {
     {
     	ArrayList<Double> estatisticas = new ArrayList<Double>();
     	
-        Double d0 = this.calculador.mediaPonderada(this.serv1.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 1.
-        Double d1 = this.calculador.mediaPonderada(this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 2.
-        Double d2 = this.calculador.mediaPonderadaTotal(this.serv1.returnaEstadosFila(),this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas Total.
-        Double d3 = this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1); //Taxa Média de Ocupação dos Servidores 1.
-        Double d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2); //Taxa Média de Ocupação dos Servidores 2.
-        Double d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal); //Tempo Médio de uma Entidade na Fila 1.
-        Double d6 = this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoTotal); //Tempo Médio de uma Entidade na Fila 2.
-        Double d7 = this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoTotal); //Tempo Medio em falha 1
-        Double d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal); //Tempo Medio em falha 2
-        Double d9 = this.calculador.tempoMedioNoSistema(tempoEmFila1,tempoOcupado1,tempoTotal); //Tempo Médio no Sistema 1.
-        Double d10 = this.calculador.tempoMedioNoSistema(tempoEmFila2,tempoOcupado2,tempoTotal); //Tempo Médio no Sistema 2.
-       
-        Double d11 = this.calculador.tempoMedioNoSistema((tempoEmFila1+tempoEmFila2),(tempoOcupado1+tempoOcupado2),tempoTotal); //Tempo Médio no Sistema Total.
-        Double d12 = (double) this.numeroEntidades1;//Contador de Entidades 1.
-		Double d13 = (double) this.numeroEntidades2;//Contador de Entidades 2.
-		Double d14 = (double) this.numeroEntidades1+this.numeroEntidades2;//Contador de Entidades Total.
-		Double d15 = (double) this.serv1.retornaSaida();//Contador de Entidades Sairam 1.
-		Double d16 = (double) this.serv2.retornaSaida();//Contador de Entidades Sairam 2.
-		Double d17 = (double) this.serv1.retornaSaida()+this.serv2.retornaSaida();//Contador de Entidades Sairam Total.
-		Double d18 = (double) this.numeroEntidades1 - serv1.retornaSaida();//Contador de Entidades 1 no Sistema.
-		Double d19 = (double) this.numeroEntidades2 - serv2.retornaSaida();//Contador de Entidades 2 no Sistema.
-		Double d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.retornaSaida()+serv2.retornaSaida());//Contador de Entidades Total no Sistema.
-		Double d21  =(double) this.contadorFalha1; //Contador numero de Falhas 1.
-		Double d22 = (double) this.contadorFalha2; //Contador numero de Falhas 2.
-		Double d23 = (double) this.numeroTrocas1; //Numero Trocas 1.
-		Double d24 = (double) this.numeroTrocas2; // Número Trocas 2.
-		Double d25 = (double) this.bloqueados1; //Numero Bloqueados 1.
-		Double d26 = (double) this.bloqueados2; //Numero Bloqueados 2.
-		
-
-    	estatisticas.add(d0); // nmef1
-    	estatisticas.add(d1); // nmef2
-    	estatisticas.add(d2); // nmef total
-    	estatisticas.add(d3); // tmos1
-    	estatisticas.add(d4); // tmos2
-    	estatisticas.add(d5); // tmef1
-    	estatisticas.add(d6); // tmef2
-    	estatisticas.add(d7); // tf1
-    	estatisticas.add(d8); // tf2
-    	estatisticas.add(d9); // mp1
-    	estatisticas.add(d10); // mp2
+    	Double d0, d1, d2, d3, d4, d5, d6, d7, d8, d9,
+    		   d10, d11, d12, d13, d14, d15, d16, d17, d18, d19, 
+    		   d20, d21, d22, d23, d24, d25, d26;
     	
+        d0 = this.calculador.mediaPonderada(this.serv1.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 1.
+        d1 = this.calculador.mediaPonderada(this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 2.
+        d2 = this.calculador.mediaPonderadaTotal(this.serv1.returnaEstadosFila(),this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas Total.
+        d3 = this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1); //Taxa Média de Ocupação dos Servidores 1.
+        d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2); //Taxa Média de Ocupação dos Servidores 2.
+        d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal); //Tempo Médio de uma Entidade na Fila 1.
+        d6 = this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoTotal); //Tempo Médio de uma Entidade na Fila 2.
+        d7 = this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoTotal); //Tempo Medio em falha 1
+        d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal); //Tempo Medio em falha 2
+        d9 = this.calculador.tempoMedioNoSistema(tempoEmFila1,tempoOcupado1,tempoTotal); //Tempo Médio no Sistema 1.
+        d10 = this.calculador.tempoMedioNoSistema(tempoEmFila2,tempoOcupado2,tempoTotal); //Tempo Médio no Sistema 2.
+        d11 = this.calculador.tempoMedioNoSistema((tempoEmFila1+tempoEmFila2),(tempoOcupado1+tempoOcupado2),tempoTotal); //Tempo Médio no Sistema Total.
+        d12 = (double) this.numeroEntidades1;//Contador de Entidades 1.
+		d13 = (double) this.numeroEntidades2;//Contador de Entidades 2.
+		d14 = (double) this.numeroEntidades1+this.numeroEntidades2;//Contador de Entidades Total.
+		d15 = (double) this.serv1.retornaSaida();//Contador de Entidades Sairam 1.
+		d16 = (double) this.serv2.retornaSaida();//Contador de Entidades Sairam 2.
+		d17 = (double) this.serv1.retornaSaida()+this.serv2.retornaSaida();//Contador de Entidades Sairam Total.
+		d18 = (double) this.numeroEntidades1 - serv1.retornaSaida();//Contador de Entidades 1 no Sistema.
+		d19 = (double) this.numeroEntidades2 - serv2.retornaSaida();//Contador de Entidades 2 no Sistema.
+		d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.retornaSaida()+serv2.retornaSaida());//Contador de Entidades Total no Sistema.
+		d21  =(double) this.contadorFalha1; //Contador numero de Falhas 1.
+		d22 = (double) this.contadorFalha2; //Contador numero de Falhas 2.
+		d23 = (double) this.numeroTrocas1; //Numero Trocas 1.
+		d24 = (double) this.numeroTrocas2; // Número Trocas 2.
+		d25 = (double) this.bloqueados1; //Numero Bloqueados 1.
+		d26 = (double) this.bloqueados2; //Numero Bloqueados 2.
+		
+    	estatisticas.add(d0);
+    	estatisticas.add(d1);
+    	estatisticas.add(d2);
+    	estatisticas.add(d3);
+    	estatisticas.add(d4);
+    	estatisticas.add(d5);
+    	estatisticas.add(d6);
+    	estatisticas.add(d7);
+    	estatisticas.add(d8);
+    	estatisticas.add(d9);
+    	estatisticas.add(d10);
     	estatisticas.add(d11);
     	estatisticas.add(d12);
     	estatisticas.add(d13);
@@ -607,19 +610,7 @@ public class Simulador {
     	estatisticas.add(d25);
     	estatisticas.add(d26);
     	
-    	// TODO Adicionar as outras ao array
-    	
-    	// TODO tmes: tempo medio entidade no sistema - DONE
-    	// TODO ce: contador entidades - DONE
-    	// TODO nf: num falhas - DONE
-    	// TODO nts: num trocas servidor - DONE
-    	// TODO neb: num entidades bloqueadas - DONE
-    	
     	this.controle.atualizaEstatisticas(estatisticas);
-    }
-
-    
-    
-    
+    }  
     
 }
