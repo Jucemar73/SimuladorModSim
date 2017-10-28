@@ -20,9 +20,6 @@ public class Simulador {
     private int tempoTotal;
     private int tempoFinal;
     
-    //private int tempoFila1;
-    //private int tempoFila2;
-    
     private int tempoOcupado1;
     private int tempoOcupado2;
     
@@ -35,13 +32,11 @@ public class Simulador {
     private int tempoEmFila1;
     private int tempoEmFila2;
     
-    //private int tempoMedioEmFilaTotal;
-    
     private int totalEmFila1;
     private int totalEmFila2;
     
-   // private int tempoSistema1;
-    //private int tempoSistema2;
+    private int tempoSistema1;
+    private int tempoSistema2;
     
     private int numeroEntidades1;
     private int numeroEntidades2;
@@ -94,9 +89,6 @@ public class Simulador {
         tempoTotal = 0;
         tempoFinal = 0;
         
-        //tempoFila1 = 0;
-        //tempoFila2 = 0;
-        
         tempoOcupado1 = 0;
         tempoOcupado2 = 0;
         
@@ -109,13 +101,11 @@ public class Simulador {
         tempoEmFila1 = 0;
         tempoEmFila2 = 0;
         
-        //tempoMedioEmFilaTotal = 0;
-        
         totalEmFila1 = 0;
         totalEmFila2 = 0;
         
-        //tempoSistema1 = 0;
-        //tempoSistema2 = 0;
+        tempoSistema1 = 0;
+        tempoSistema2 = 0;
         
         numeroEntidades1 = 0;
         numeroEntidades2 = 0;
@@ -400,18 +390,6 @@ public class Simulador {
         while (this.tempoTotal <= this.tempoFinal) 
         {
             this.tempoTotal++;
-            
-        	System.out.println("TEMPO TOTAL = " + this.tempoTotal);
-        	System.out.println("TEMPO FINAL = " + this.tempoFinal);
-        	
-        	try 
-        	{
-        		Thread.sleep(100);
-			} 
-        	catch (Exception e) 
-        	{
-				// TODO: handle exception
-			}
         
             if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
             {
@@ -567,8 +545,7 @@ public class Simulador {
     	this.controle.atualizaEstatisticas(estatisticas);
     }
 
-    public double mediaPonderada(ArrayList<Integer> lista)
-    {
+    public double mediaPonderada(ArrayList<Integer> lista) {
         int temp = 0;
         int i = 0;
         while (i <= this.tempoTotal && lista.size() > 0) 
@@ -579,5 +556,8 @@ public class Simulador {
         return temp;
     }
     
+    public double tempoMedioNoSistema(int tempoEmFila,int tempoOcupado, int tempoTotal) {
+    	  return (tempoEmFila+tempoOcupado)/tempoTotal;
+    }
     
 }
