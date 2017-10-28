@@ -45,7 +45,7 @@ public class Controle
 	{
 		if(pausa)
 			System.out.println("PAUSA");
-		else // Se n„o pausado
+		else // Se n√£o pausado
 			this.timer.schedule(new TarefaTimer(this), this.delay, this.delay);
 	}
 	
@@ -63,7 +63,7 @@ public class Controle
 	
 	public boolean estaRodando() 
 	{
-		return this.janela.estaRodando(); // Se n„o est· em pausa
+		return this.janela.estaRodando(); // Se n√£o est√° em pausa
 	}
 
 	public void rodaSimulacao() 
@@ -81,22 +81,22 @@ public class Controle
 		this.rodaSimulacao();
 	}
 
-	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lÛgica o modo de TEC
+	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na l√≥gica o modo de TEC
 	{
 		this.simulador.setModoTec(numFuncao);
 	}
 	
-	public void definaFuncaoEstatisticaTs(int numFuncao) // Seta na lÛgica o modo de TS
+	public void definaFuncaoEstatisticaTs(int numFuncao) // Seta na l√≥gica o modo de TS
 	{
 		this.simulador.setModoTs(numFuncao);
 	}
 	
-	public void definaFuncaoEstatisticaTef(int numFuncao) // Seta na lÛgica o modo de TEF
+	public void definaFuncaoEstatisticaTef(int numFuncao) // Seta na l√≥gica o modo de TEF
 	{
 		this.simulador.setModoTef(numFuncao);
 	}
 	
-	public void definaFuncaoEstatisticaTf(int numFuncao) // Seta na lÛgica o modo de TF
+	public void definaFuncaoEstatisticaTf(int numFuncao) // Seta na l√≥gica o modo de TF
 	{
 		this.simulador.setModoTf(numFuncao);
 	}
@@ -114,7 +114,7 @@ public class Controle
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Valor inv·lido inserido no par‚metro TEC!");
+			System.err.println("Valor inv√°lido inserido no par√¢metro TEC!");
 		}
 	}
 
@@ -126,7 +126,7 @@ public class Controle
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Valor inv·lido inserido no par‚metro TS!");
+			System.err.println("Valor inv√°lido inserido no par√¢metro TS!");
 		}
 		
 	}
@@ -139,7 +139,7 @@ public class Controle
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Valor inv·lido inserido no par‚metro TEF!");
+			System.err.println("Valor inv√°lido inserido no par√¢metro TEF!");
 		}
 		
 	}
@@ -152,7 +152,7 @@ public class Controle
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Valor inv·lido inserido no par‚metro TF!");
+			System.err.println("Valor inv√°lido inserido no par√¢metro TF!");
 		}
 		
 	}
@@ -165,7 +165,7 @@ public class Controle
 		} 
 		catch (Exception e) 
 		{
-			System.err.println("Valor inv·lido inserido no par‚metro de tempo!");
+			System.err.println("Valor inv√°lido inserido no par√¢metro de tempo!");
 		}
 	}
 	
@@ -179,8 +179,5 @@ public class Controle
 	{
 		this.janela.atualizaEstatisticas(estatisticas);
 	}
-
-
-
 
 }

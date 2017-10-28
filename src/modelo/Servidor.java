@@ -11,6 +11,7 @@ public class Servidor {
 	private ArrayList<Integer> estadosFila = new ArrayList<Integer>();
 	private double processTime;
 	private double timeOut;
+	private int entidadesSaida = 0;
 
 	public boolean retornaOcupado() {
 		return this.ocupado;
@@ -58,13 +59,22 @@ public class Servidor {
 		if (this.processTime > 0.0) {
 			this.processTime -= 1.0;
 			if (this.processTime == 0.0)
-				this.setOcupado(this.ocupado);
-		} else if (this.filaServidor.size() != 0) {
+				this.setOcupado(false);
+				this.entidadesSaida++;
+		}
+		if (this.processTime == 0 && this.filaServidor.size() != 0) {
 			this.assingProcess(this.filaServidor.remove(0));
 		}
-		this.estadosFila.add(this.filaServidor.size());
 	}
 
+	public void atualizaListaEstados() {
+		this.estadosFila.add(this.filaServidor.size());
+	}
+	
+	public int retornaSaida() {
+		return this.entidadesSaida;
+	}
+	
 	public void setTimeOut(double tempo) {
 		this.timeOut = tempo;
 		this.setAtivo(false);
