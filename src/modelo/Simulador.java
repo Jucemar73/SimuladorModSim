@@ -17,6 +17,8 @@ public class Simulador {
     
     private int unidadeDeTempo; // 0 para seg, 1 para min, 2 para horas
     
+    private long delay;
+    
     private int tempoTotal;
     private int tempoFinal;
     
@@ -77,14 +79,16 @@ public class Simulador {
     
     // Construtor
     
-    public Simulador(Controle controle) { 
+    public Simulador(Controle controle) { // TODO verificar valores iniciais de variáveis
         serv1 = new Servidor();
         serv2 = new Servidor();
         gerador = new Gerador();
         calculador = new Calculador();
         entidadeNova = null;
-        
         this.controle = controle;
+        
+        this.unidadeDeTempo = 0;
+        this.delay = 0;
         
         tempoTotal = 0;
         tempoFinal = 0;
@@ -171,6 +175,20 @@ public class Simulador {
     		this.tempoFinal = (t * 3600);
     	
     	System.out.println("TEMPO FINAL DEFINIDO: " + this.tempoFinal);
+    }
+    
+    public void setDelay(int modo)
+    {
+    	if(modo == 0) // Lento
+    		this.delay = 1000;
+    	if(modo == 1) // Normal
+    		this.delay = 500;
+    	if(modo == 2) // Rápido
+    		this.delay = 100;
+    	if(modo == 3) // Instantâneo
+    		this.delay = 0;
+    	
+    	System.out.println("DELAY DEFINIDO: " + this.delay + "ms");
     }
     
 	public void setModoTec(int modo)
@@ -389,6 +407,16 @@ public class Simulador {
     {
         while (this.tempoTotal <= this.tempoFinal) 
         {
+        	
+        	try 
+        	{
+				Thread.sleep(this.delay);
+			} 
+        	catch (Exception e) 
+        	{
+				System.err.println("EXCEPTION THREAD SLEEP");
+			}
+        	
             this.tempoTotal++;
         
             if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
@@ -457,7 +485,7 @@ public class Simulador {
         }
     }
 
-	public void assingToServer(Entidade entidade) {
+	public void assingToServer(Entidade entidade) { // Versão que veio do telegram
 		if (entidade.retornaTipo() == 1) {
 			if (this.serv1.retornaAtivo() == false && this.serv2.retornaAtivo() == true) {
 				if (maxSize > serv2.getSizeFila() && maxSize >= 0) {

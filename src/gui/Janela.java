@@ -3,9 +3,14 @@ package gui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,6 +43,7 @@ public class Janela extends JFrame
 	private JButton funcaoEstatisticaTf;
 	
 	private JButton unidadeTempo;
+	private JButton velocidadeExec;
 	
 	// Etiquetas
 	
@@ -45,6 +51,7 @@ public class Janela extends JFrame
 	private JLabel estatisticas;
 	private JLabel tituloSelecaoFuncoes;
 	private JLabel tituloSelecaoTempo;
+	private JLabel tituloSelecaoVelocidade;
 	
 	// TextField
 	
@@ -64,7 +71,6 @@ public class Janela extends JFrame
 	private double tmos2;
 	private double tmef1;
 	private double tmef2;
-	
 	private double tf1;
 	private double tf2;
 	private double mp1;
@@ -76,6 +82,8 @@ public class Janela extends JFrame
 	private double nts;
 	private double eb;
 	
+	private int cicloAtual;
+	
 	// Variáveis de controle
 	
 	private int numFuncaoEstatisticaTec;
@@ -84,6 +92,7 @@ public class Janela extends JFrame
 	private int numFuncaoEstatisticaTf;
 	
 	private int numUnidadeTempo;
+	private int numVelocidade;
 	
 	private boolean pausa;
 	
@@ -133,6 +142,12 @@ public class Janela extends JFrame
 		return texto;
 	}
 	
+	private String definaTextoTituloSelecaoVelocidade() 
+	{
+		String texto = "<html> VELOCIDADE DE SIMULAÇÃO </br>";
+		return texto;
+	}
+	
 	private void atualizaTextoEstatisticas() 
 	{
         String texto =    
@@ -145,7 +160,12 @@ public class Janela extends JFrame
         		+ "<html> &nbsp&nbsp&nbsp Estatísticas: <br/>"
         		+ "<html> &nbsp&nbsp&nbsp <br/>"
         		
-        		+ "<html> &nbsp&nbsp&nbsp Número médio de entidades na fila 1: " + this.nmef1 + " <br/>"
+        		+ "<html> &nbsp&nbsp&nbsp Número médio de entidades na fila 1: " + this.nmef1 
+        		+ " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp " 
+        		+ " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp " 
+        		+ " &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp "         		
+        		+ " Ciclo Atual: &nbsp&nbsp "         		
+        		+ this.cicloAtual + " <br/>"
         		+ "<html> &nbsp&nbsp&nbsp Número médio de entidades na fila 2: " + this.nmef2 + " <br/>"
         		+ "<html> &nbsp&nbsp&nbsp Média total de entidades na fila : " + this.nmefTotal + " <br/>"
         		
@@ -179,19 +199,40 @@ public class Janela extends JFrame
 	
 	private void reiniciaInterfaceSimulacao() 
 	{
-		this.playPause.setText("►");
-		
 		this.numFuncaoEstatisticaTec = -1;
 		this.numFuncaoEstatisticaTs = -1;
 		this.numFuncaoEstatisticaTef = -1;
 		this.numFuncaoEstatisticaTf = -1;
 		this.numUnidadeTempo = -1;
+		this.numVelocidade = -1;
 		this.pausa = true;
+		
+		this.playPause.setText("►");
 		this.funcaoEstatisticaTec.setText("Modo estatístico");
 		this.funcaoEstatisticaTs.setText("Modo estatístico");
 		this.funcaoEstatisticaTef.setText("Modo estatístico");
 		this.funcaoEstatisticaTf.setText("Modo estatístico");
 		this.unidadeTempo.setText("Unidade temporal");
+		this.velocidadeExec.setText("Velocidade");
+		
+		// Reinicia as estatísticas
+		
+		this.nmef1 = 0;
+		this.nmef2 = 0;
+		this.nmefTotal = 0;
+		this.tmos1 = 0;
+		this.tmos2 = 0;
+		this.tmef1 = 0;
+		this.tmef2 = 0;
+		this.tf1 = 0;
+		this.tf2 = 0;
+		this.mp1 = 0;
+		this.mp2 = 0;
+		this.tmes = 0;
+		this.ce = 0;
+		this.nf = 0;
+		this.nts = 0;
+		this.eb = 0;
 		
 		this.campoTec.setText("");
 		this.campoTs.setText("");
@@ -199,6 +240,7 @@ public class Janela extends JFrame
 		this.campoTf.setText("");
 		this.campoTempo.setText("");
 	}
+
 	
 	// Construtor
 	
@@ -220,12 +262,15 @@ public class Janela extends JFrame
 		this.nf = 0;
 		this.nts = 0;
 		
+		this.cicloAtual = 0;
+		
 		this.numFuncaoEstatisticaTec = -1;
 		this.numFuncaoEstatisticaTs = -1;
 		this.numFuncaoEstatisticaTef = -1;
 		this.numFuncaoEstatisticaTf = -1;
 		
 		this.numUnidadeTempo = -1;
+		this.numVelocidade = -1;
 		
 		this.pausa = true;
 		
@@ -397,6 +442,20 @@ public class Janela extends JFrame
 		unidadeTempo.setVisible(false);
 		unidadeTempo.addMouseListener(new ListenerMousePassou(this.corTexto, unidadeTempo));
 		
+		velocidadeExec = new JButton("Velocidade");
+		velocidadeExec.setToolTipText("Clique para selecionar a velocidade da execução da simulação.");
+		velocidadeExec.setFont(new Font("Arial", Font.PLAIN, 18));
+		velocidadeExec.setForeground(this.corTexto);
+		velocidadeExec.setBounds(550, 460, 200, 100);
+		velocidadeExec.setFocusPainted(false);
+		velocidadeExec.setMargin(new Insets(0, 0, 0, 0));
+		velocidadeExec.setContentAreaFilled(false);
+		velocidadeExec.setBorderPainted(this.bordasLigadas);
+		velocidadeExec.setOpaque(false);
+		velocidadeExec.addActionListener(new TratadorSelecionarVelocidade(this));
+		velocidadeExec.setVisible(false);
+		velocidadeExec.addMouseListener(new ListenerMousePassou(this.corTexto, velocidadeExec));
+		
 		container.add(iniciar);
 		container.add(voltar);
 		container.add(info);
@@ -408,6 +467,7 @@ public class Janela extends JFrame
 		container.add(funcaoEstatisticaTef);
 		container.add(funcaoEstatisticaTf);
 		container.add(unidadeTempo);
+		container.add(velocidadeExec);
 		
 		// Criação dos labels da interface
 		
@@ -418,7 +478,7 @@ public class Janela extends JFrame
 		descricao.setVisible(false);
 		
 		estatisticas = new JLabel();
-		this.atualizaTextoEstatisticas(); // TODO Tirar isso? Talvez
+		this.atualizaTextoEstatisticas();
 		estatisticas.setFont(new Font("Arial", Font.PLAIN, 18));
 		estatisticas.setForeground(Color.BLACK);
 		estatisticas.setBounds(0, 0, 800, 600);
@@ -436,10 +496,17 @@ public class Janela extends JFrame
 		tituloSelecaoTempo.setBounds(600, 280, 200, 20);
 		tituloSelecaoTempo.setVisible(false);
 		
+		tituloSelecaoVelocidade = new JLabel(this.definaTextoTituloSelecaoVelocidade());
+		tituloSelecaoVelocidade.setFont(new Font("Arial", Font.PLAIN, 16));
+		tituloSelecaoVelocidade.setForeground(Color.BLACK);
+		tituloSelecaoVelocidade.setBounds(540, 430, 300, 40);
+		tituloSelecaoVelocidade.setVisible(false);
+		
 		container.add(descricao);
 		container.add(estatisticas);
 		container.add(tituloSelecaoFuncoes);
 		container.add(tituloSelecaoTempo);
+		container.add(tituloSelecaoVelocidade);
 		
 		// Criação dos text fields
 		
@@ -502,11 +569,13 @@ public class Janela extends JFrame
 		this.estatisticas.setVisible(true);
 		this.tituloSelecaoFuncoes.setVisible(true);
 		this.tituloSelecaoTempo.setVisible(true);
+		this.tituloSelecaoVelocidade.setVisible(true);
 		this.funcaoEstatisticaTec.setVisible(true);
 		this.funcaoEstatisticaTs.setVisible(true);
 		this.funcaoEstatisticaTef.setVisible(true);
 		this.funcaoEstatisticaTf.setVisible(true);
 		this.unidadeTempo.setVisible(true);
+		this.velocidadeExec.setVisible(true);
 		
 		this.campoTec.setVisible(true); 
 		this.campoTs.setVisible(true); 
@@ -528,6 +597,7 @@ public class Janela extends JFrame
 		this.estatisticas.setVisible(false);
 		this.tituloSelecaoFuncoes.setVisible(false);
 		this.tituloSelecaoTempo.setVisible(false);
+		this.tituloSelecaoVelocidade.setVisible(false);
 		this.playPause.setVisible(false);
 		this.restart.setVisible(false);
 		this.funcaoEstatisticaTec.setVisible(false);
@@ -535,6 +605,7 @@ public class Janela extends JFrame
 		this.funcaoEstatisticaTef.setVisible(false);
 		this.funcaoEstatisticaTf.setVisible(false);
 		this.unidadeTempo.setVisible(false);
+		this.velocidadeExec.setVisible(false);
 		
 		this.campoTec.setVisible(false); 
 		this.campoTs.setVisible(false);
@@ -579,19 +650,24 @@ public class Janela extends JFrame
 	
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas)
 	{
-		this.nmef1 = estatisticas.get(0);
-		this.nmef2 = estatisticas.get(1);
-		this.nmefTotal = estatisticas.get(2);
-		this.tmos1 = estatisticas.get(3);
-		this.tmos2 = estatisticas.get(4);
-		this.tmef1 = estatisticas.get(5);
-		this.tmef2 = estatisticas.get(6);
-		this.tf1 = estatisticas.get(7);
-		this.tf2 = estatisticas.get(8);
-		this.mp1 = estatisticas.get(9);
-		this.mp2 = estatisticas.get(10);
+		this.cicloAtual++;
+		
+		System.out.println("CICLO ATUAL = " + this.cicloAtual);
+		
+		//this.nmef1 = estatisticas.get(0);
+		//this.nmef2 = estatisticas.get(1);
+		//this.nmefTotal = estatisticas.get(2);
+		//this.tmos1 = estatisticas.get(3);
+		//this.tmos2 = estatisticas.get(4);
+		//this.tmef1 = estatisticas.get(5);
+		//.tmef2 = estatisticas.get(6);
+		//this.tf1 = estatisticas.get(7);
+		//this.tf2 = estatisticas.get(8);
+		//this.mp1 = estatisticas.get(9);
+		//this.mp2 = estatisticas.get(10);
 		
 		// TODO outras estatísticas no modelo
+		
 		//this.tmes = estatisticas.get(11);
 		//this.ce = estatisticas.get(12);
 		//this.nf = estatisticas.get(13);
@@ -770,5 +846,31 @@ public class Janela extends JFrame
 		this.controle.definaParametroTempo(this.campoTempo.getText()); // Manda a string para ser lida
 	}
 
+	public void selecionarVelocidade() 
+	{
+		this.numVelocidade++;
+		if(this.numVelocidade > 3)
+			this.numVelocidade = 0;
+		if(this.numVelocidade == 0)
+		{
+			this.velocidadeExec.setText("Lento");
+			this.controle.definaVelocidadeSimulacao(this.numVelocidade);
+		}
+		if(this.numVelocidade == 1)
+		{
+			this.velocidadeExec.setText("Normal");
+			this.controle.definaVelocidadeSimulacao(this.numVelocidade);
+		}
+		if(this.numVelocidade == 2)
+		{
+			this.velocidadeExec.setText("Rápido");
+			this.controle.definaVelocidadeSimulacao(this.numVelocidade);
+		}
+		if(this.numVelocidade == 3)
+		{
+			this.velocidadeExec.setText("Instantâneo");
+			this.controle.definaVelocidadeSimulacao(this.numVelocidade);
+		}
+	}
 	
 }

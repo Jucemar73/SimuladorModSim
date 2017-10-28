@@ -143,6 +143,11 @@ public class Controle
 			System.err.println("Valor inválido inserido no parâmetro de tempo!");
 		}
 	}
+	
+	public void definaVelocidadeSimulacao(int num)
+	{
+		this.simulador.setDelay(num);
+	}
 
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas) 
 	{
