@@ -178,6 +178,8 @@ public class Simulador {
     	if(this.unidadeDeTempo == 2) // horas
     		this.tempoFinal = (t * 3600);
     	
+    	this.tempoFinal--; // Para interface ficar correta, pois conta o ciclo 0
+    	
     	System.out.println("TEMPO FINAL DEFINIDO: " + this.tempoFinal);
     }
     

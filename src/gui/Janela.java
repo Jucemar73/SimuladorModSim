@@ -31,6 +31,7 @@ public class Janela extends JFrame
 	
 	private JButton playPause;
 	private JButton restart;
+	private JButton next;
 	
 	private JButton funcaoEstatisticaTec;
 	private JButton funcaoEstatisticaTs;
@@ -345,7 +346,7 @@ public class Janela extends JFrame
 		playPause.setToolTipText("Play");
 		playPause.setFont(this.fonte);
 		playPause.setForeground(this.corTexto);
-		playPause.setBounds(110, 110, 50, 50);
+		playPause.setBounds(85, 110, 50, 50);
 		playPause.setFocusPainted(false);
 		playPause.setMargin(new Insets(0, 0, 0, 0));
 		playPause.setContentAreaFilled(false);
@@ -355,11 +356,11 @@ public class Janela extends JFrame
 		playPause.setVisible(false);
 		playPause.addMouseListener(new ListenerMousePassou(this.corTexto, playPause));
 		
-		restart = new JButton("←"); 
+		restart = new JButton("R"); 
 		restart.setToolTipText("Reiniciar");
 		restart.setFont(this.fonte);
 		restart.setForeground(this.corTexto);
-		restart.setBounds(60, 110, 50, 50);
+		restart.setBounds(35, 110, 50, 50);
 		restart.setFocusPainted(false);
 		restart.setMargin(new Insets(0, 0, 0, 0));
 		restart.setContentAreaFilled(false);
@@ -368,6 +369,20 @@ public class Janela extends JFrame
 		restart.addActionListener(new TratadorRestart(this));
 		restart.setVisible(false);
 		restart.addMouseListener(new ListenerMousePassou(this.corTexto, restart));
+		
+		next = new JButton("→"); 
+		next.setToolTipText("Avança para o próximo estado da simulação.");
+		next.setFont(this.fonte);
+		next.setForeground(this.corTexto);
+		next.setBounds(135, 110, 50, 50);
+		next.setFocusPainted(false);
+		next.setMargin(new Insets(0, 0, 0, 0));
+		next.setContentAreaFilled(false);
+		next.setBorderPainted(this.bordasLigadas);
+		next.setOpaque(false);
+		next.addActionListener(new TratadorProximoPasso(this));
+		next.setVisible(false);
+		next.addMouseListener(new ListenerMousePassou(this.corTexto, next));
 		
 		funcaoEstatisticaTec = new JButton("Modo estatístico");
 		funcaoEstatisticaTec.setToolTipText("Clique para selecionar a função estatística para TEC");
@@ -459,6 +474,7 @@ public class Janela extends JFrame
 		container.add(sair);
 		container.add(playPause);
 		container.add(restart);
+		container.add(next);
 		container.add(funcaoEstatisticaTec);
 		container.add(funcaoEstatisticaTs);
 		container.add(funcaoEstatisticaTef);
@@ -568,6 +584,7 @@ public class Janela extends JFrame
 		this.voltar.setVisible(true);
 		this.playPause.setVisible(true);
 		this.restart.setVisible(true);
+		this.next.setVisible(true);
 		this.estatisticas.setVisible(true);
 		this.tituloSelecaoFuncoes.setVisible(true);
 		this.tituloSelecaoTempo.setVisible(true);
@@ -602,6 +619,7 @@ public class Janela extends JFrame
 		this.tituloSelecaoVelocidade.setVisible(false);
 		this.playPause.setVisible(false);
 		this.restart.setVisible(false);
+		this.next.setVisible(false);
 		this.funcaoEstatisticaTec.setVisible(false);
 		this.funcaoEstatisticaTs.setVisible(false);
 		this.funcaoEstatisticaTef.setVisible(false);
@@ -648,6 +666,12 @@ public class Janela extends JFrame
 	{
 		this.reiniciaInterfaceSimulacao();
 		this.controle.restart();
+	}
+	
+	public void avancaProximoPasso() 
+	{
+		if(this.pausa == true && this.cicloAtual != 0)
+			this.controle.avanceProximoPasso();
 	}
 	
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas)

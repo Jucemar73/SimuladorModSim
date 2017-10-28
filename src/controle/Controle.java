@@ -75,6 +75,11 @@ public class Controle
 	{
 		this.timer.cancel();
 	}
+	
+	public void avanceProximoPasso() 
+	{
+		this.rodaSimulacao();
+	}
 
 	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lógica o modo de TEC
 	{
@@ -173,8 +178,9 @@ public class Controle
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas) 
 	{
 		this.janela.atualizaEstatisticas(estatisticas);
-		//this.simulador.simulacao();
 	}
+
+
 
 
 }
