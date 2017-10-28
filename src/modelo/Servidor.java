@@ -13,47 +13,56 @@ public class Servidor {
     private double timeOut;
 
 
-    public boolean retornaOcupado() {
+    public boolean retornaOcupado()
+    {
         return this.ocupado;
     }
 
-    public boolean retornaAtivo() {
+    public boolean retornaAtivo() 
+    {
         return this.ativo;
     }
 
-    public void setOcupado(boolean ocupado) {
+    public void setOcupado(boolean ocupado) 
+    {
         this.ocupado = ocupado;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(boolean ativo)
+    {
         this.ativo = ativo;
     }
 
-    public void addToQueue(Entidade entidade) {
+    public void addToQueue(Entidade entidade) 
+    {
         this.filaServidor.add(entidade);
     }
 
-    public int getSizeFila() {
+    public int getSizeFila() 
+    {
         return this.filaServidor.size();
     }
 
-    public ArrayList<Integer> returnaEstadosFila() {
+    public ArrayList<Integer> returnaEstadosFila() 
+    {
         return this.estadosFila;
     }
 
-    public void assingProcess(Entidade entidade) {
-        if (!this.retornaOcupado()) {
+    public void assingProcess(Entidade entidade) 
+    {
+        if (!this.retornaOcupado()) 
+        {
             this.processTime = entidade.retornaTs();
             this.setOcupado(true);
         }
     }
 
-    public void newArrival(Entidade entidade) {
-        if (this.filaServidor.size() == 0 && !this.retornaOcupado()) {
+    public void newArrival(Entidade entidade) 
+    {
+        if (this.filaServidor.size() == 0 && !this.retornaOcupado()) 
             this.assingProcess(entidade);
-        } else {
+        else 
             this.addToQueue(entidade);
-        }
     }
 
     public void process() 
@@ -62,9 +71,7 @@ public class Servidor {
         {
             this.processTime -= 1.0;
             if (this.processTime == 0.0) 
-            {
                 this.setOcupado(this.ocupado);
-            }
         } 
         else if (this.filaServidor.size() != 0) 
         {
@@ -73,15 +80,16 @@ public class Servidor {
         this.estadosFila.add(this.filaServidor.size());
     }
 
-    public void setTimeOut(double tempo) {
+    public void setTimeOut(double tempo) 
+    {
         this.timeOut = tempo;
         this.setAtivo(false);
     }
 
-    public void tryRecover() {
+    public void tryRecover() 
+    {
         this.timeOut -= 1.0;
-        if (this.timeOut <= 0.0) {
-            this.setAtivo(true);
-        }
+        if (this.timeOut <= 0.0) 
+            this.setAtivo(true); 
     }
 }

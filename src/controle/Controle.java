@@ -39,14 +39,9 @@ public class Controle
 	public void playPause(boolean pausa)
 	{
 		if(pausa)
-		{
-			// TODO lógica pause
-		}
+			System.out.println("PAUSA"); // TODO lógica pause
 		else // Se não pausado
-		{
 			this.simulador.iniciarSimulacao();
-		}
-			
 	}
 	
 	public void restart() 

@@ -123,7 +123,7 @@ public class Janela extends JFrame
 					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
 					+ "nbsp&nbsp MODO TEF &nbsp&nbsp&nbsp&nbsp&"
 					+ "nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&"
-					+ "nbsp&nbsp MODO TC <br/>";
+					+ "nbsp&nbsp MODO TF <br/>";
 		return texto;
 	}
 	
@@ -567,7 +567,6 @@ public class Janela extends JFrame
 	public void playPause() 
 	{
 		this.pausa = !pausa;
-		System.out.println(pausa);
 		this.atualizaPlayPause();
 		this.controle.playPause(pausa);
 	}
@@ -593,11 +592,11 @@ public class Janela extends JFrame
 		this.mp2 = estatisticas.get(10);
 		
 		// TODO outras estatísticas no modelo
-		this.tmes = estatisticas.get(11);
-		this.ce = estatisticas.get(12);
-		this.nf = estatisticas.get(13);
-		this.nts = estatisticas.get(14);
-		this.eb = estatisticas.get(15);
+		//this.tmes = estatisticas.get(11);
+		//this.ce = estatisticas.get(12);
+		//this.nf = estatisticas.get(13);
+		//this.nts = estatisticas.get(14);
+		//this.eb = estatisticas.get(15);
 		
 		this.atualizaTextoEstatisticas();
 	}
@@ -756,12 +755,12 @@ public class Janela extends JFrame
 		}
 		if(this.numUnidadeTempo == 1) // Horas
 		{
-			this.unidadeTempo.setText("Horas");
+			this.unidadeTempo.setText("Minutos");
 			this.controle.definaUnidadeTempo(this.numUnidadeTempo);
 		}
 		if(this.numUnidadeTempo == 2) // Dias
 		{
-			this.unidadeTempo.setText("Dias");
+			this.unidadeTempo.setText("Horas");
 			this.controle.definaUnidadeTempo(this.numUnidadeTempo);
 		}
 	}

@@ -20,8 +20,8 @@ public class Simulador {
     private int tempoTotal;
     private int tempoFinal;
     
-    private int tempoFila1;
-    private int tempoFila2;
+    //private int tempoFila1;
+    //private int tempoFila2;
     
     private int tempoOcupado1;
     private int tempoOcupado2;
@@ -35,16 +35,20 @@ public class Simulador {
     private int tempoEmFila1;
     private int tempoEmFila2;
     
-    private int tempoMedioEmFilaTotal;
+    //private int tempoMedioEmFilaTotal;
     
     private int totalEmFila1;
     private int totalEmFila2;
     
-    private int tempoSistema1;
-    private int tempoSistema2;
+   // private int tempoSistema1;
+    //private int tempoSistema2;
     
     private int numeroEntidades1;
     private int numeroEntidades2;
+    
+    private int maxSize;
+    private int bloqueados1;
+    private int bloqueados2;
     
     private int numeroTrocas1;
     private int numeroTrocas2;
@@ -90,8 +94,8 @@ public class Simulador {
         tempoTotal = 0;
         tempoFinal = 0;
         
-        tempoFila1 = 0;
-        tempoFila2 = 0;
+        //tempoFila1 = 0;
+        //tempoFila2 = 0;
         
         tempoOcupado1 = 0;
         tempoOcupado2 = 0;
@@ -105,13 +109,13 @@ public class Simulador {
         tempoEmFila1 = 0;
         tempoEmFila2 = 0;
         
-        tempoMedioEmFilaTotal = 0;
+        //tempoMedioEmFilaTotal = 0;
         
         totalEmFila1 = 0;
         totalEmFila2 = 0;
         
-        tempoSistema1 = 0;
-        tempoSistema2 = 0;
+        //tempoSistema1 = 0;
+        //tempoSistema2 = 0;
         
         numeroEntidades1 = 0;
         numeroEntidades2 = 0;
@@ -214,9 +218,9 @@ public class Simulador {
 		double par2 = 0;
 		int cont = 0;
 		String temp = "";
-
+		
 		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
-			par0 = Integer.parseInt(texto);
+			par0 = Double.parseDouble(texto);
 		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
@@ -232,8 +236,16 @@ public class Simulador {
 					if(cont == 2)
 						par2 = Double.parseDouble(temp);
 					temp = "";
+					cont++;
 				}
 			}
+			if(cont == 0)
+				par0 = Double.parseDouble(temp);
+			if(cont == 1)
+				par1 = Double.parseDouble(temp);
+			if(cont == 2)
+				par2 = Double.parseDouble(temp);
+			temp = "";
 		}
 		
 		this.op1Arr = par0;
@@ -252,7 +264,7 @@ public class Simulador {
 		String temp = "";
 
 		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
-			par0 = Integer.parseInt(texto);
+			par0 = Double.parseDouble(texto);
 		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
@@ -268,8 +280,16 @@ public class Simulador {
 					if(cont == 2)
 						par2 = Double.parseDouble(temp);
 					temp = "";
+					cont++;
 				}
 			}
+			if(cont == 0)
+				par0 = Double.parseDouble(temp);
+			if(cont == 1)
+				par1 = Double.parseDouble(temp);
+			if(cont == 2)
+				par2 = Double.parseDouble(temp);
+			temp = "";
 		}
 		
 		this.op1Ent = par0;
@@ -288,7 +308,7 @@ public class Simulador {
 		String temp = "";
 
 		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
-			par0 = Integer.parseInt(texto);
+			par0 = Double.parseDouble(texto);
 		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
@@ -304,7 +324,15 @@ public class Simulador {
 					if(cont == 2)
 						par2 = Double.parseDouble(temp);
 					temp = "";
+					cont++;
 				}
+				if(cont == 0)
+					par0 = Double.parseDouble(temp);
+				if(cont == 1)
+					par1 = Double.parseDouble(temp);
+				if(cont == 2)
+					par2 = Double.parseDouble(temp);
+				temp = "";
 			}
 		}
 		
@@ -324,7 +352,7 @@ public class Simulador {
 		String temp = "";
 
 		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
-			par0 = Integer.parseInt(texto);
+			par0 = Double.parseDouble(texto);
 		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
@@ -340,8 +368,17 @@ public class Simulador {
 					if(cont == 2)
 						par2 = Double.parseDouble(temp);
 					temp = "";
+					cont++;
 				}
+				
 			}
+			if(cont == 0)
+				par0 = Double.parseDouble(temp);
+			if(cont == 1)
+				par1 = Double.parseDouble(temp);
+			if(cont == 2)
+				par2 = Double.parseDouble(temp);
+			temp = "";
 		}
 		
 		this.op1EmFalha = par0;
@@ -353,82 +390,129 @@ public class Simulador {
     
     // Outros métodos
 
-    public void iniciarSimulacao() {
+    public void iniciarSimulacao() 
+    {
     	 this.simulacao();
     }
 
-    public void simulacao() {
-        while (this.tempoTotal <= this.tempoFinal) {
-            if (this.tempoTotal == this.nextArrivalTime) {
+    public void simulacao() // TODO CONSERTAR
+    {
+        while (this.tempoTotal <= this.tempoFinal) 
+        {
+            this.tempoTotal++;
+            
+        	System.out.println("TEMPO TOTAL = " + this.tempoTotal);
+        	System.out.println("TEMPO FINAL = " + this.tempoFinal);
+        	
+        	try 
+        	{
+        		Thread.sleep(100);
+			} 
+        	catch (Exception e) 
+        	{
+				// TODO: handle exception
+			}
+        
+            if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
+            {
                 this.entidadeNova = this.gerador.geraEntidade(this.modeGerador, this.op1Ent, this.op2Ent, this.op3Ent);
-                if (this.entidadeNova.retornaTipo() == 1) {
+                if (this.entidadeNova.retornaTipo() == 1) 
                     ++this.numeroEntidades1;
-                } else {
+                else 
                     ++this.numeroEntidades2;
-                }
+
                 this.assingToServer(new Entidade(this.entidadeNova));
                 this.nextArrivalTime += (int)this.geraTempo(this.modeArrival, this.op1Arr, this.op2Arr, this.op3Arr);
             }
-            if (this.tempoTotal == this.nextFailureTime1) {
+            
+            if (this.tempoTotal == this.nextFailureTime1)
+            {
                 this.nextWakeTime1 = this.tempoTotal + (int)this.geraTempo(this.modeEmFalha, this.op1EmFalha, this.op2EmFalha, this.op3EmFalha);
                 this.serv1.setAtivo(false);
             }
-            if (this.tempoTotal == this.nextFailureTime2) {
+            
+            if (this.tempoTotal == this.nextFailureTime2)
+            {
                 this.nextWakeTime2 = this.tempoTotal + (int)this.geraTempo(this.modeEmFalha, this.op1EmFalha, this.op2EmFalha, this.op3EmFalha);
-                this.serv1.setAtivo(false);
+                this.serv2.setAtivo(false);
             }
-            if (this.tempoTotal == this.nextFailureTime1) {
+            
+            if (this.tempoTotal == this.nextFailureTime1) 
+            {
                 this.nextFailureTime1 = this.tempoTotal + (int)this.geraTempo(this.modeParaFalha, this.op1ParaFalha, this.op2ParaFalha, this.op3ParaFalha);
                 this.serv1.setAtivo(true);
             }
-            if (this.tempoTotal == this.nextFailureTime2) {
+            
+            if (this.tempoTotal == this.nextFailureTime2)
+            {
                 this.nextFailureTime2 = this.tempoTotal + (int)this.geraTempo(this.modeParaFalha, this.op1ParaFalha, this.op2ParaFalha, this.op3ParaFalha);
-                this.serv1.setAtivo(true);
+                this.serv2.setAtivo(true);
             }
-            if (this.serv1.retornaAtivo()) {
+            
+            if (this.serv1.retornaAtivo()) 
                 this.serv1.process();
-            }
-            if (this.serv2.retornaAtivo()) {
+            if (this.serv2.retornaAtivo()) 
                 this.serv2.process();
-            }
+            
             this.totalEmFila1 += this.serv1.getSizeFila();
             this.totalEmFila2 += this.serv2.getSizeFila();
-            if (this.serv1.retornaAtivo()) {
+            
+            if(this.serv1.retornaAtivo()) 
+            {
                 ++this.tempoAtivo1;
-                if (this.serv1.retornaOcupado()) {
-                    ++this.tempoOcupado1;
-                }
-            } else {
+                if (this.serv1.retornaOcupado()) 
+                    ++this.tempoOcupado1;     
+            } 
+            else
                 ++this.tempoFalha1;
-            }
-            if (this.serv2.retornaAtivo()) {
+            
+            if(this.serv2.retornaAtivo()) 
+            {
                 ++this.tempoAtivo2;
-                if (this.serv2.retornaOcupado()) {
+                if (this.serv2.retornaOcupado()) 
                     ++this.tempoOcupado2;
-                }
-            } else {
+            } 
+            else
                 ++this.tempoFalha1;
-            }
-            if(this.tempoTotal != 0)
-            	this.atualizaEstatisticas();
+            
+            this.atualizaEstatisticas();
         }
     }
 
-    public void assingToServer(Entidade entidade) {
-        if (entidade.retornaTipo() == 1) {
-            if (!this.serv1.retornaAtivo() && this.serv2.retornaAtivo()) {
-                ++this.numeroTrocas1;
-                this.serv2.newArrival(new Entidade(entidade));
-            } else {
-                this.serv1.newArrival(new Entidade(entidade));
-            }
-        } else if (!this.serv2.retornaAtivo() && this.serv1.retornaAtivo()) {
-            ++this.numeroTrocas2;
-            this.serv1.newArrival(entidade);
-        } else {
-            this.serv2.newArrival(entidade);
-        }
-    }
+	public void assingToServer(Entidade entidade) {
+		if (entidade.retornaTipo() == 1) {
+			if (this.serv1.retornaAtivo() == false && this.serv2.retornaAtivo() == true) {
+				if (maxSize > serv2.getSizeFila() && maxSize >= 0) {
+					numeroTrocas1++;
+					this.serv2.newArrival(new Entidade(entidade));
+				} else {
+					bloqueados1++;
+				}
+			} else {
+				if (maxSize > serv1.getSizeFila() && maxSize >= 0) {
+					this.serv1.newArrival(new Entidade(entidade));
+				} else {
+					bloqueados1++;
+				}
+			}
+		} else {
+			if (this.serv2.retornaAtivo() == false && this.serv1.retornaAtivo() == true) {
+				if (maxSize > serv1.getSizeFila() && maxSize >= 0) {
+					numeroTrocas2++;
+					this.serv1.newArrival(entidade);
+				} else {
+					bloqueados2++;
+				}
+
+			} else {
+				if (maxSize > serv2.getSizeFila() && maxSize >= 0) {
+					this.serv2.newArrival(entidade);
+				} else {
+					bloqueados2++;
+				}
+			}
+		}
+	}
 
     public double geraTempo(int mode, double op1, double op2, double op3) 
     {
@@ -444,7 +528,8 @@ public class Simulador {
         return (double)this.tempoFinal + this.calculador.probUniforme(op1, op2);
     }
 
-    public void atualizaEstatisticas() {
+    public void atualizaEstatisticas() 
+    {
         Double d0 = this.calculador.numeroMedioFilas(this.totalEmFila1, this.tempoTotal);
         Double d1 = this.calculador.numeroMedioFilas(this.totalEmFila2, this.tempoTotal);
         Double d2 = this.calculador.numeroMedioFilas(this.totalEmFila1 + this.totalEmFila2, this.tempoTotal);
@@ -482,13 +567,17 @@ public class Simulador {
     	this.controle.atualizaEstatisticas(estatisticas);
     }
 
-    public double mediaPonderada(ArrayList<Integer> lista) {
+    public double mediaPonderada(ArrayList<Integer> lista)
+    {
         int temp = 0;
         int i = 0;
-        while (i <= this.tempoTotal) {
+        while (i <= this.tempoTotal && lista.size() > 0) 
+        {
             temp += lista.remove(0) / this.tempoTotal;
             ++i;
         }
         return temp;
     }
+    
+    
 }
