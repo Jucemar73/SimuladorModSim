@@ -1,6 +1,7 @@
 package controle;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import gui.Janela;
 import modelo.Simulador;
@@ -9,9 +10,13 @@ public class Controle
 {
 	private Janela janela;
 	private Simulador simulador;
+	private Timer timer;
+	
+	private long delay;
 	
 	public Controle()
 	{
+		this.timer = new Timer();
 	}
 	
 	public Janela getJanela()
@@ -39,9 +44,9 @@ public class Controle
 	public void playPause(boolean pausa)
 	{
 		if(pausa)
-			System.out.println("PAUSA"); // TODO lógica pause
+			System.out.println("PAUSA");
 		else // Se não pausado
-			this.simulador.iniciarSimulacao();
+			this.timer.schedule(new TarefaTimer(this), this.delay, this.delay);
 	}
 	
 	public void restart() 
@@ -54,6 +59,21 @@ public class Controle
 	{
 		System.out.println("Encerrando...");
 		System.exit(0);
+	}
+	
+	public boolean estaRodando() 
+	{
+		return this.janela.estaRodando(); // Se não está em pausa
+	}
+
+	public void rodaSimulacao() 
+	{
+		this.simulador.simulacao();
+	}
+	
+	public void encerrarSimulacao() 
+	{
+		this.timer.cancel();
 	}
 
 	public void definaFuncaoEstatisticaTec(int numFuncao) // Seta na lógica o modo de TEC
@@ -147,11 +167,14 @@ public class Controle
 	public void definaVelocidadeSimulacao(int num)
 	{
 		this.simulador.setDelay(num);
+		this.delay = this.simulador.getDelay();
 	}
 
 	public void atualizaEstatisticas(ArrayList<Double> estatisticas) 
 	{
 		this.janela.atualizaEstatisticas(estatisticas);
+		//this.simulador.simulacao();
 	}
+
 
 }

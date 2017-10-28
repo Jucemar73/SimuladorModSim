@@ -156,6 +156,10 @@ public class Simulador {
         return this.serv2;
     }
     
+    public long getDelay() {
+    	return this.delay;
+    }
+    
     // Sets
     
     public void setUnidadeTempo(int unidade)
@@ -398,27 +402,14 @@ public class Simulador {
     
     // Outros métodos
 
-    public void iniciarSimulacao() 
-    {
-    	 this.simulacao();
-    }
-
     public void simulacao() // TODO CONSERTAR
     {
-        while (this.tempoTotal <= this.tempoFinal) 
+        if (this.tempoTotal <= this.tempoFinal) 
         {
-        	
-        	try 
-        	{
-				Thread.sleep(this.delay);
-			} 
-        	catch (Exception e) 
-        	{
-				System.err.println("EXCEPTION THREAD SLEEP");
-			}
-        	
             this.tempoTotal++;
         
+            /*
+            
             if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
             {
                 this.entidadeNova = this.gerador.geraEntidade(this.modeGerador, this.op1Ent, this.op2Ent, this.op3Ent);
@@ -481,7 +472,14 @@ public class Simulador {
             else
                 ++this.tempoFalha1;
             
+            */
+            
             this.atualizaEstatisticas();
+            
+        }
+        else // Simulação acabou
+        {
+        	this.controle.encerrarSimulacao();
         }
     }
 
@@ -536,6 +534,9 @@ public class Simulador {
 
     public void atualizaEstatisticas() 
     {
+    	ArrayList<Double> estatisticas = new ArrayList<Double>();
+    	
+    	/*
         Double d0 = this.calculador.numeroMedioFilas(this.totalEmFila1, this.tempoTotal);
         Double d1 = this.calculador.numeroMedioFilas(this.totalEmFila2, this.tempoTotal);
         Double d2 = this.calculador.numeroMedioFilas(this.totalEmFila1 + this.totalEmFila2, this.tempoTotal);
@@ -547,8 +548,6 @@ public class Simulador {
         Double d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoTotal);
         Double d9 = this.mediaPonderada(this.serv1.returnaEstadosFila());
         Double d10 = this.mediaPonderada(this.serv2.returnaEstadosFila());
-        
-    	ArrayList<Double> estatisticas = new ArrayList<Double>();
 
     	estatisticas.add(d0); // nmef1
     	estatisticas.add(d1); // nmef2
@@ -561,6 +560,8 @@ public class Simulador {
     	estatisticas.add(d8); // tf2
     	estatisticas.add(d9); // mp1
     	estatisticas.add(d10); // mp2
+    	
+    	*/
     	
     	// TODO Adicionar as outras ao array
     	

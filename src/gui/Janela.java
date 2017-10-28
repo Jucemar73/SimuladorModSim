@@ -3,14 +3,10 @@ package gui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Insets;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +22,7 @@ public class Janela extends JFrame
 	private Font fonte;
 	private Container container;
 	private Controle controle;
+	private Timer timer;
 	
 	// Botões
 	
@@ -48,7 +45,7 @@ public class Janela extends JFrame
 	// Etiquetas
 	
 	private JLabel descricao;
-	private JLabel estatisticas;
+	private final JLabel estatisticas;
 	private JLabel tituloSelecaoFuncoes;
 	private JLabel tituloSelecaoTempo;
 	private JLabel tituloSelecaoVelocidade;
@@ -559,6 +556,11 @@ public class Janela extends JFrame
 	public Color getCorTexto()
 	{
 		return this.corTexto;
+	}
+	
+	public boolean estaRodando()
+	{
+		return !(this.pausa); // se pausa == true, retorna falso
 	}
 	
 	public void iniciar()
