@@ -184,6 +184,8 @@ public class Simulador {
     	if(this.unidadeDeTempo == 2) // horas
     		this.tempoFinal = (t * 3600);
     	
+    	this.tempoFinal--;
+    	
     	System.out.println("TEMPO FINAL DEFINIDO: " + this.tempoFinal);
     }
     
@@ -196,7 +198,7 @@ public class Simulador {
     	if(modo == 2) // Rápido
     		this.delay = 100;
     	if(modo == 3) // Instantâneo
-    		this.delay = 0;
+    		this.delay = 1;
     	
     	System.out.println("DELAY DEFINIDO: " + this.delay + "ms");
     }
@@ -414,7 +416,7 @@ public class Simulador {
         {
             this.tempoTotal++;
             
-            if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
+            if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 1) // TODO mudei aqui
             {
                 this.entidadeNova = this.gerador.geraEntidade(this.modeGerador, this.op1Ent, this.op2Ent, this.op3Ent);
                 if (this.entidadeNova.retornaTipo() == 1) 
