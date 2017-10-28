@@ -82,7 +82,7 @@ public class Simulador {
     
     // Construtor
     
-    public Simulador(Controle controle) { // TODO verificar valores iniciais de variáveis
+    public Simulador(Controle controle) {
         serv1 = new Servidor();
         serv2 = new Servidor();
         gerador = new Gerador();
@@ -414,8 +414,6 @@ public class Simulador {
         {
             this.tempoTotal++;
             
-            /*
-            
             if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 0)
             {
                 this.entidadeNova = this.gerador.geraEntidade(this.modeGerador, this.op1Ent, this.op2Ent, this.op3Ent);
@@ -480,16 +478,12 @@ public class Simulador {
             else
                 ++this.tempoFalha1;
             
-            
             this.tempoEmFila1 += this.serv1.getSizeFila();
             this.tempoEmFila2 += this.serv2.getSizeFila();
             this.serv1.atualizaListaEstados();
             this.serv2.atualizaListaEstados();
             
-            */
-            
-            this.atualizaEstatisticas();
-            
+            this.atualizaEstatisticas(); 
         }
         else // Simulação acabou
         {
@@ -575,7 +569,7 @@ public class Simulador {
 		d18 = (double) this.numeroEntidades1 - serv1.retornaSaida();//Contador de Entidades 1 no Sistema.
 		d19 = (double) this.numeroEntidades2 - serv2.retornaSaida();//Contador de Entidades 2 no Sistema.
 		d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.retornaSaida()+serv2.retornaSaida());//Contador de Entidades Total no Sistema.
-		d21  =(double) this.contadorFalha1; //Contador numero de Falhas 1.
+		d21 = (double) this.contadorFalha1; //Contador numero de Falhas 1.
 		d22 = (double) this.contadorFalha2; //Contador numero de Falhas 2.
 		d23 = (double) this.numeroTrocas1; //Numero Trocas 1.
 		d24 = (double) this.numeroTrocas2; // Número Trocas 2.

@@ -217,6 +217,7 @@ public class Janela extends JFrame
 		this.funcaoEstatisticaTf.setText("Modo estatístico");
 		this.unidadeTempo.setText("Unidade temporal");
 		this.velocidadeExec.setText("Velocidade");
+		this.labelCicloAtual.setText(this.definaTextoCicloAtual());
 		
 		// Reinicia as estatísticas
 		
