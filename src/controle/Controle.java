@@ -52,6 +52,7 @@ public class Controle
 	public void restart() 
 	{
 		this.simulador = new Simulador(this); // Recria o objeto
+		this.timer = new Timer();
 		System.out.println("Objeto simulador recriado.");
 	}
 	

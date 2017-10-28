@@ -1,24 +1,29 @@
 package modelo;
 
-public class Entidade {
-    int tipo;
-    double ts;
+public class Entidade 
+{
+    private int tipo;
+    private double ts;
 
-    public Entidade(int tipo, double ts) {
+    public Entidade(int tipo, double ts) 
+    {
         this.tipo = tipo;
         this.ts = ts;
     }
 
-    public Entidade(Entidade entidade) {
-        this.tipo = entidade.retornaTipo();
-        this.ts = entidade.retornaTs();
+    public Entidade(Entidade entidade) 
+    {
+        this.tipo = entidade.getTipo();
+        this.ts = entidade.getTs();
     }
 
-    public int retornaTipo() {
+    public int getTipo() 
+    {
         return this.tipo;
     }
 
-    public double retornaTs() {
+    public double getTs() 
+    {
         return this.ts;
     }
 }

@@ -21,25 +21,19 @@ public class Simulador {
     
     private int tempoTotal;
     private int tempoFinal;
-    
     private int tempoOcupado1;
     private int tempoOcupado2;
-    
     private int tempoAtivo1;
     private int tempoAtivo2;
-    
     private int tempoFalha1;
     private int tempoFalha2;
-    
     private int tempoEmFila1;
     private int tempoEmFila2;
-    
-    private int totalEmFila1;
-    private int totalEmFila2;
-    
     private int tempoSistema1;
     private int tempoSistema2;
     
+    private int totalEmFila1;
+    private int totalEmFila2;
     private int numeroEntidades1;
     private int numeroEntidades2;
     
@@ -49,7 +43,6 @@ public class Simulador {
     
     private int contadorFalha1;
     private int contadorFalha2;
-    
     private int numeroTrocas1;
     private int numeroTrocas2;
     
@@ -67,15 +60,12 @@ public class Simulador {
     private double op1Arr;
     private double op2Arr;
     private double op3Arr;
-    
     private double op1EmFalha;
     private double op2EmFalha;
     private double op3EmFalha;
-    
     private double op1ParaFalha;
     private double op2ParaFalha;
     private double op3ParaFalha;
-    
     private double op1Ent;
     private double op2Ent;
     private double op3Ent;
@@ -94,34 +84,30 @@ public class Simulador {
         this.delay = 0;
         
         tempoTotal = 0;
-        tempoFinal = 0;
-        
+        tempoFinal = 0;       
         tempoOcupado1 = 0;
-        tempoOcupado2 = 0;
-        
+        tempoOcupado2 = 0;       
         tempoAtivo1 = 0;
-        tempoAtivo2 = 0;
-        
+        tempoAtivo2 = 0;       
         tempoFalha1 = 0;
-        tempoFalha2 = 0;
-        
+        tempoFalha2 = 0;       
         tempoEmFila1 = 0;
         tempoEmFila2 = 0;
-        
-        totalEmFila1 = 0;
-        totalEmFila2 = 0;
-        
         tempoSistema1 = 0;
         tempoSistema2 = 0;
         
+        totalEmFila1 = 0;
+        totalEmFila2 = 0;
+     
+        
+        
         numeroEntidades1 = 0;
         numeroEntidades2 = 0;
+        numeroTrocas1 = 0;
+        numeroTrocas2 = 0;
         
         contadorFalha1 = 0;
         contadorFalha2 = 0;
-        
-        numeroTrocas1 = 0;
-        numeroTrocas2 = 0;
         
         modeArrival = 0; // TEC
         modeGerador = 0; // TS
@@ -129,23 +115,20 @@ public class Simulador {
         modeParaFalha = 0; // TF
         
         nextArrivalTime = 0;
-        nextFailureTime1 = 0;
-        nextFailureTime2 = 0;
-        nextWakeTime1 = 0;
-        nextWakeTime2 = 0;
+        //nextFailureTime1 = 0;
+        //nextFailureTime2 = 0;
+        //nextWakeTime1 = 0;
+        //nextWakeTime2 = 0;
         
         op1Arr = 0;
         op2Arr = 0;
         op3Arr = 0;
-        
         op1Ent = 0;
         op2Ent = 0;
         op3Ent = 0;
-        
         op1ParaFalha = 0;
         op2ParaFalha = 0;
         op3ParaFalha = 0;
-        
         op1EmFalha = 0;
         op2EmFalha = 0;
         op3EmFalha = 0;
@@ -412,14 +395,13 @@ public class Simulador {
 
     public void simulacao() // TODO CONSERTAR
     {
-        if (this.tempoTotal <= this.tempoFinal) 
+        if(this.tempoTotal <= this.tempoFinal) // Se ainda tem tempo de simulação, entra
         {
-            this.tempoTotal++;
-            
-            if (this.tempoTotal == this.nextArrivalTime || this.tempoTotal == 1) // TODO mudei aqui
+
+            if(this.tempoTotal == this.nextArrivalTime)
             {
                 this.entidadeNova = this.gerador.geraEntidade(this.modeGerador, this.op1Ent, this.op2Ent, this.op3Ent);
-                if (this.entidadeNova.retornaTipo() == 1) 
+                if (this.entidadeNova.getTipo() == 1) 
                     ++this.numeroEntidades1;
                 else 
                     ++this.numeroEntidades2;
@@ -428,117 +410,139 @@ public class Simulador {
                 this.nextArrivalTime += (int)this.geraTempo(this.modeArrival, this.op1Arr, this.op2Arr, this.op3Arr);
             }
             
-            if (this.tempoTotal == this.nextFailureTime1)
+            if(this.tempoTotal == this.nextFailureTime1)
             {
                 this.nextWakeTime1 = this.tempoTotal + (int)this.geraTempo(this.modeEmFalha, this.op1EmFalha, this.op2EmFalha, this.op3EmFalha);
                 this.serv1.setAtivo(false);
                  contadorFalha1++;
             }
             
-            if (this.tempoTotal == this.nextFailureTime2)
+            if(this.tempoTotal == this.nextFailureTime2)
             {
                 this.nextWakeTime2 = this.tempoTotal + (int)this.geraTempo(this.modeEmFalha, this.op1EmFalha, this.op2EmFalha, this.op3EmFalha);
                 this.serv2.setAtivo(false);
             	contadorFalha1++;
             }
             
-            if (this.tempoTotal == this.nextFailureTime1) 
+            if(this.tempoTotal == this.nextFailureTime1) 
             {
                 this.nextFailureTime1 = this.tempoTotal + (int)this.geraTempo(this.modeParaFalha, this.op1ParaFalha, this.op2ParaFalha, this.op3ParaFalha);
                 this.serv1.setAtivo(true);
             }
             
-            if (this.tempoTotal == this.nextFailureTime2)
+            if(this.tempoTotal == this.nextFailureTime2)
             {
                 this.nextFailureTime2 = this.tempoTotal + (int)this.geraTempo(this.modeParaFalha, this.op1ParaFalha, this.op2ParaFalha, this.op3ParaFalha);
                 this.serv2.setAtivo(true);
             }
             
-            if (this.serv1.retornaAtivo()) 
-                this.serv1.process();
-            if (this.serv2.retornaAtivo()) 
-                this.serv2.process();
+            if(this.tempoTotal == this.nextWakeTime1)
+            {
+            	// TODO
+            }
             
-            this.totalEmFila1 += this.serv1.getSizeFila();
-            this.totalEmFila2 += this.serv2.getSizeFila();
+            if(this.tempoTotal == this.nextWakeTime2)
+            {
+            	// TODO
+            }
             
-            if(this.serv1.retornaAtivo()) 
+            if (this.serv1.estaAtivo()) 
+                this.serv1.processamento();
+            if (this.serv2.estaAtivo()) 
+                this.serv2.processamento();
+            
+            this.totalEmFila1 += this.serv1.getTamFila(); // TODO Isto não está sendo utilizado
+            this.totalEmFila2 += this.serv2.getTamFila();
+            
+            if(this.serv1.estaAtivo()) 
             {
                 ++this.tempoAtivo1;
-                if (this.serv1.retornaOcupado()) 
+                if (this.serv1.estaOcupado()) 
                     ++this.tempoOcupado1;     
-            } 
+            }
             else
                 ++this.tempoFalha1;
             
-            if(this.serv2.retornaAtivo()) 
+            if(this.serv2.estaAtivo()) 
             {
                 ++this.tempoAtivo2;
-                if (this.serv2.retornaOcupado()) 
+                if (this.serv2.estaOcupado()) 
                     ++this.tempoOcupado2;
             } 
             else
                 ++this.tempoFalha1;
             
-            this.tempoEmFila1 += this.serv1.getSizeFila();
-            this.tempoEmFila2 += this.serv2.getSizeFila();
+            this.tempoEmFila1 += this.serv1.getTamFila();
+            this.tempoEmFila2 += this.serv2.getTamFila();
             this.serv1.atualizaListaEstados();
             this.serv2.atualizaListaEstados();
             
+            this.tempoTotal++;
+            
             this.atualizaEstatisticas(); 
         }
-        else // Simulação acabou
+        else // senão tem mais tempo, simulação acaba
         {
         	this.controle.encerrarSimulacao();
         }
     }
 
-	public void assingToServer(Entidade entidade) { // Versão que veio do telegram
-		if (entidade.retornaTipo() == 1) {
-			if (this.serv1.retornaAtivo() == false && this.serv2.retornaAtivo() == true) {
-				if (maxSize > serv2.getSizeFila() && maxSize >= 0) {
+	public void assingToServer(Entidade entidade)
+	{
+		if (entidade.getTipo() == 1) 
+		{
+			if (this.serv1.estaAtivo() == false && this.serv2.estaAtivo() == true)
+			{
+				if (maxSize > serv2.getTamFila() && maxSize >= 0) 
+				{
 					numeroTrocas1++;
-					this.serv2.newArrival(new Entidade(entidade));
-				} else {
+					this.serv2.novaChegada(new Entidade(entidade));
+				} 
+				else 
 					bloqueados1++;
-				}
-			} else {
-				if (maxSize > serv1.getSizeFila() && maxSize >= 0) {
-					this.serv1.newArrival(new Entidade(entidade));
-				} else {
+			} 
+			else 
+			{
+				if (maxSize > serv1.getTamFila() && maxSize >= 0) 
+					this.serv1.novaChegada(new Entidade(entidade));
+				
+				else 
 					bloqueados1++;
-				}
 			}
-		} else {
-			if (this.serv2.retornaAtivo() == false && this.serv1.retornaAtivo() == true) {
-				if (maxSize > serv1.getSizeFila() && maxSize >= 0) {
+		}
+		else
+		{
+			if (this.serv2.estaAtivo() == false && this.serv1.estaAtivo() == true) 
+			{
+				if (maxSize > serv1.getTamFila() && maxSize >= 0) 
+				{
 					numeroTrocas2++;
-					this.serv1.newArrival(entidade);
-				} else {
+					this.serv1.novaChegada(entidade);
+				} 
+				else
 					bloqueados2++;
-				}
-
-			} else {
-				if (maxSize > serv2.getSizeFila() && maxSize >= 0) {
-					this.serv2.newArrival(entidade);
-				} else {
+			} 
+			else 
+			{
+				if (maxSize > serv2.getTamFila() && maxSize >= 0) 
+					this.serv2.novaChegada(entidade);
+				else 
 					bloqueados2++;
-				}
 			}
 		}
 	}
 
     public double geraTempo(int mode, double op1, double op2, double op3) 
     {
-        if (mode == 0) 
+        if (mode == 0) // Constante
             return this.tempoFinal + 10;
-        if (mode == 1) 
+        if (mode == 1) // Exponencial
             return (double)this.tempoFinal + this.calculador.probExponencial(op1);
-        if (mode == 2) 
+        if (mode == 2) // Normal
         	return (double)this.tempoFinal + this.calculador.probNormal(op1, op2);
-        if (mode == 3) 
+        if (mode == 3) // Triangular
             return (double)this.tempoFinal + this.calculador.probTriangular(op1, op2, op3);
-        
+        // Uniforme
         return (double)this.tempoFinal + this.calculador.probUniforme(op1, op2);
     }
 
@@ -550,9 +554,9 @@ public class Simulador {
     		   d10, d11, d12, d13, d14, d15, d16, d17, d18, d19, 
     		   d20, d21, d22, d23, d24, d25, d26;
     	
-        d0 = this.calculador.mediaPonderada(this.serv1.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 1.
-        d1 = this.calculador.mediaPonderada(this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas 2.
-        d2 = this.calculador.mediaPonderadaTotal(this.serv1.returnaEstadosFila(),this.serv2.returnaEstadosFila(), this.tempoTotal); //Número Médio de Entidades nas Filas Total.
+        d0 = this.calculador.mediaPonderada(this.serv1.getFilaDeEstados(), this.tempoTotal); //Número Médio de Entidades nas Filas 1.
+        d1 = this.calculador.mediaPonderada(this.serv2.getFilaDeEstados(), this.tempoTotal); //Número Médio de Entidades nas Filas 2.
+        d2 = this.calculador.mediaPonderadaTotal(this.serv1.getFilaDeEstados(),this.serv2.getFilaDeEstados(), this.tempoTotal); //Número Médio de Entidades nas Filas Total.
         d3 = this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1); //Taxa Média de Ocupação dos Servidores 1.
         d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2); //Taxa Média de Ocupação dos Servidores 2.
         d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoTotal); //Tempo Médio de uma Entidade na Fila 1.
@@ -562,15 +566,15 @@ public class Simulador {
         d9 = this.calculador.tempoMedioNoSistema(tempoEmFila1,tempoOcupado1,tempoTotal); //Tempo Médio no Sistema 1.
         d10 = this.calculador.tempoMedioNoSistema(tempoEmFila2,tempoOcupado2,tempoTotal); //Tempo Médio no Sistema 2.
         d11 = this.calculador.tempoMedioNoSistema((tempoEmFila1+tempoEmFila2),(tempoOcupado1+tempoOcupado2),tempoTotal); //Tempo Médio no Sistema Total.
-        d12 = (double) this.numeroEntidades1;//Contador de Entidades 1.
-		d13 = (double) this.numeroEntidades2;//Contador de Entidades 2.
-		d14 = (double) this.numeroEntidades1+this.numeroEntidades2;//Contador de Entidades Total.
-		d15 = (double) this.serv1.retornaSaida();//Contador de Entidades Sairam 1.
-		d16 = (double) this.serv2.retornaSaida();//Contador de Entidades Sairam 2.
-		d17 = (double) this.serv1.retornaSaida()+this.serv2.retornaSaida();//Contador de Entidades Sairam Total.
-		d18 = (double) this.numeroEntidades1 - serv1.retornaSaida();//Contador de Entidades 1 no Sistema.
-		d19 = (double) this.numeroEntidades2 - serv2.retornaSaida();//Contador de Entidades 2 no Sistema.
-		d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.retornaSaida()+serv2.retornaSaida());//Contador de Entidades Total no Sistema.
+        d12 = (double) this.numeroEntidades1; //Contador de Entidades 1.
+		d13 = (double) this.numeroEntidades2; //Contador de Entidades 2.
+		d14 = (double) this.numeroEntidades1+this.numeroEntidades2; //Contador de Entidades Total.
+		d15 = (double) this.serv1.getEntidadesSaida(); //Contador de Entidades Sairam 1.
+		d16 = (double) this.serv2.getEntidadesSaida(); //Contador de Entidades Sairam 2.
+		d17 = (double) this.serv1.getEntidadesSaida()+this.serv2.getEntidadesSaida(); //Contador de Entidades Sairam Total.
+		d18 = (double) this.numeroEntidades1 - serv1.getEntidadesSaida(); //Contador de Entidades 1 no Sistema.
+		d19 = (double) this.numeroEntidades2 - serv2.getEntidadesSaida(); //Contador de Entidades 2 no Sistema.
+		d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.getEntidadesSaida()+serv2.getEntidadesSaida()); //Contador de Entidades Total no Sistema.
 		d21 = (double) this.contadorFalha1; //Contador numero de Falhas 1.
 		d22 = (double) this.contadorFalha2; //Contador numero de Falhas 2.
 		d23 = (double) this.numeroTrocas1; //Numero Trocas 1.
