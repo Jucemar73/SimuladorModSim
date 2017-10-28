@@ -190,7 +190,7 @@ public class Simulador {
     	if(modo == 2) // Rápido
     		this.delay = 100;
     	if(modo == 3) // Instantâneo
-    		this.delay = 0;
+    		this.delay = 1;
     	
     	System.out.println("DELAY DEFINIDO: " + this.delay + "ms");
     }
@@ -275,9 +275,9 @@ public class Simulador {
 		int cont = 0;
 		String temp = "";
 
-		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+		if(this.modeGerador == 0 || this.modeGerador == 1) // Const, exp
 			par0 = Double.parseDouble(texto);
-		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		if(this.modeGerador == 2 || this.modeGerador == 3 || this.modeGerador == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
 			{
@@ -319,9 +319,9 @@ public class Simulador {
 		int cont = 0;
 		String temp = "";
 
-		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+		if(this.modeEmFalha == 0 || this.modeEmFalha == 1) // Const, exp
 			par0 = Double.parseDouble(texto);
-		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		if(this.modeEmFalha == 2 || this.modeEmFalha == 3 || this.modeEmFalha == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
 			{
@@ -338,15 +338,16 @@ public class Simulador {
 					temp = "";
 					cont++;
 				}
-				if(cont == 0)
-					par0 = Double.parseDouble(temp);
-				if(cont == 1)
-					par1 = Double.parseDouble(temp);
-				if(cont == 2)
-					par2 = Double.parseDouble(temp);
-				temp = "";
 			}
+			if(cont == 0)
+				par0 = Double.parseDouble(temp);
+			if(cont == 1)
+				par1 = Double.parseDouble(temp);
+			if(cont == 2)
+				par2 = Double.parseDouble(temp);
+			temp = "";
 		}
+		
 		
 		this.op1ParaFalha = par0;
 		this.op2ParaFalha = par1;
@@ -363,9 +364,9 @@ public class Simulador {
 		int cont = 0;
 		String temp = "";
 
-		if(this.modeArrival == 0 || this.modeArrival == 1) // Const, exp
+		if(this.modeParaFalha == 0 || this.modeParaFalha == 1) // Const, exp
 			par0 = Double.parseDouble(texto);
-		if(this.modeArrival == 2 || this.modeArrival == 3 || this.modeArrival == 4) // Norm, Tri, Uni
+		if(this.modeParaFalha == 2 || this.modeParaFalha == 3 || this.modeParaFalha == 4) // Norm, Tri, Uni
 		{
 			for(int i = 0; i < texto.length(); i++)
 			{

@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,7 +21,6 @@ public class Janela extends JFrame
 	private Font fonte;
 	private Container container;
 	private Controle controle;
-	private Timer timer;
 	
 	// Botões
 	
@@ -202,6 +200,7 @@ public class Janela extends JFrame
 		this.numFuncaoEstatisticaTf = -1;
 		this.numUnidadeTempo = -1;
 		this.numVelocidade = -1;
+		this.cicloAtual = 0;
 		this.pausa = true;
 		
 		this.playPause.setText("►");
@@ -236,6 +235,7 @@ public class Janela extends JFrame
 		this.campoTef.setText("");
 		this.campoTf.setText("");
 		this.campoTempo.setText("");
+		this.atualizaTextoEstatisticas();
 	}
 
 	
@@ -807,7 +807,7 @@ public class Janela extends JFrame
 		}
 	}
 
-	public void definaParametroEstatistico(int num) // 0 para TEC, 1 para TS, 2 para TEF, 3 para TC
+	public void definaParametroEstatistico(int num) // 0 para TEC, 1 para TS, 2 para TEF, 3 para TF
 	{
 		if(num == 0) // TEC
 			this.controle.definaParametroTec(this.campoTec.getText());
