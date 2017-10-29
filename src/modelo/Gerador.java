@@ -3,9 +3,14 @@ package modelo;
 import modelo.Calculador;
 import modelo.Entidade;
 
-public class Gerador 
+public class Gerador
 {
-    private Calculador calculador = new Calculador();
+    private Calculador calculador;
+    
+    public Gerador(Calculador calc)
+    {
+    	this.calculador = calc;
+    }
 
     public Entidade geraEntidade(int mode, double op1, double op2, double op3) 
     {

@@ -3,18 +3,12 @@ package modelo;
 public class Entidade 
 {
     private int tipo;
-    private double ts;
+    private double tempoDeServico;
 
     public Entidade(int tipo, double ts) 
     {
         this.tipo = tipo;
-        this.ts = ts;
-    }
-
-    public Entidade(Entidade entidade) 
-    {
-        this.tipo = entidade.getTipo();
-        this.ts = entidade.getTs();
+        this.tempoDeServico = ts;
     }
 
     public int getTipo() 
@@ -22,8 +16,8 @@ public class Entidade
         return this.tipo;
     }
 
-    public double getTs() 
+    public double getTempoDeServico() 
     {
-        return this.ts;
+        return this.tempoDeServico;
     }
 }

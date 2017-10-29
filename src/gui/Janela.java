@@ -63,7 +63,7 @@ public class Janela extends JFrame
 	
 	private double d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13;
 	private double d14, d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
-	
+	private double tempoAtualSimulacao;
 	private int cicloAtual;
 	
 	// Variáveis de controle
@@ -132,7 +132,8 @@ public class Janela extends JFrame
 	
 	private String definaTextoCicloAtual()
 	{
-		String texto = "<html> Ciclo atual: " + this.cicloAtual + " <br/>";
+		String texto = "<html> Ciclo atual: " + this.cicloAtual + " <br/>"
+					 + "<html> Tempo atual:"  + this.tempoAtualSimulacao + " </br>";
 		return texto;
 	}
 	
@@ -208,6 +209,7 @@ public class Janela extends JFrame
 		this.numUnidadeTempo = -1;
 		this.numVelocidade = -1;
 		this.cicloAtual = 0;
+		this.tempoAtualSimulacao = 0;
 		this.pausa = true;
 		
 		this.playPause.setText("►");
@@ -231,7 +233,6 @@ public class Janela extends JFrame
 		this.d7 = 0;
 		this.d8 = 0;
 		this.d9 = 0;
-		
 		this.d10 = 0;
 		this.d11 = 0;
 		this.d12 = 0;
@@ -242,7 +243,6 @@ public class Janela extends JFrame
 		this.d17 = 0;
 		this.d18 = 0;
 		this.d19 = 0;
-		
 		this.d20 = 0;
 		this.d21 = 0;
 		this.d22 = 0;
@@ -250,7 +250,6 @@ public class Janela extends JFrame
 		this.d24 = 0;
 		this.d25 = 0;
 		this.d26 = 0;
-
 		
 		this.campoTec.setText("");
 		this.campoTs.setText("");
@@ -275,7 +274,6 @@ public class Janela extends JFrame
 		this.d7 = 0;
 		this.d8 = 0;
 		this.d9 = 0;
-		
 		this.d10 = 0;
 		this.d11 = 0;
 		this.d12 = 0;
@@ -286,7 +284,6 @@ public class Janela extends JFrame
 		this.d17 = 0;
 		this.d18 = 0;
 		this.d19 = 0;
-		
 		this.d20 = 0;
 		this.d21 = 0;
 		this.d22 = 0;
@@ -294,6 +291,7 @@ public class Janela extends JFrame
 		this.d24 = 0;
 		this.d25 = 0;
 		this.d26 = 0;
+		this.tempoAtualSimulacao = 0;
 		
 		this.cicloAtual = 0;
 		
@@ -722,8 +720,6 @@ public class Janela extends JFrame
 	{
 		this.cicloAtual++;
 		
-		System.out.println("CICLO ATUAL = " + this.cicloAtual);
-		
 		this.d0 = estatisticas.get(0);
 		this.d1 = estatisticas.get(1);
 		this.d2 = estatisticas.get(2);
@@ -753,6 +749,8 @@ public class Janela extends JFrame
 		this.d24 = estatisticas.get(24);
 		this.d25 = estatisticas.get(25);
 		this.d26 = estatisticas.get(26);
+		
+		this.tempoAtualSimulacao = estatisticas.get(27);
 		
 		this.atualizaTextoEstatisticas();
 		this.labelCicloAtual.setText(this.definaTextoCicloAtual());
