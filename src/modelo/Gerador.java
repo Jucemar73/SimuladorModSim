@@ -18,7 +18,7 @@ public class Gerador
         if (Math.random() >= 0.5) 
             tipo = 2;
         
-        double ts = mode == 0 ? op1 * 100.0 // Constante
+        double ts = mode == 0 ? op1
         		 : (mode == 1 ? this.calculador.probExponencial(op1) 
         		 : (mode == 2 ? this.calculador.probNormal(op1, op2) 
         		 : (mode == 3 ? this.calculador.probTriangular(op1, op2, op3) 

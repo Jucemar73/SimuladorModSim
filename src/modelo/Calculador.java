@@ -72,6 +72,7 @@ public class Calculador
         }
         return temp;
     }
+    
     public double mediaPonderadaTotal(ArrayList<Integer> lista1, ArrayList<Integer> lista2, double tempo) // TODO testar
     { 
     	int temp = 0;

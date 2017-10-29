@@ -6,7 +6,7 @@ import controle.Controle;
 
 public class Simulador 
 {
-	// Objetos (6)
+	// Objetos (7)
 	
     private Servidor serv1;
     private Servidor serv2;
@@ -14,6 +14,7 @@ public class Simulador
     private Calculador calculador;
     private Entidade entidadeNova;
     private Controle controle;
+    private Estado proxEstado;
     
     // Display Janela (2)
     
@@ -49,10 +50,8 @@ public class Simulador
     private double proxTempoDeTerminoDeServico1;
     private double proxTempoDeTerminoDeServico2;
     
-    // Estatísticas (8)
+    // Estatísticas (6)
     
-    private int numEntidades1; // Número total de entidades tipo 1.
-    private int numEntidades2; // Número total de entidades tipo 2.
     private int numBloqueios1; // Número total de entidades tipo 1 bloqueadas.
     private int numBloqueios2; // Número total de entidades tipo 2 bloqueadas.
     private int numFalhas1;    // Número total de falhas do serv1.
@@ -75,14 +74,15 @@ public class Simulador
     
     public Simulador(Controle controle) 
     {
-    	// Objetos (6)
+    	// Objetos (7)
     	
-        serv1 = new Servidor();
-        serv2 = new Servidor();
+        serv1 = new Servidor("1");
+        serv2 = new Servidor("2");
         calculador = new Calculador();
         gerador = new Gerador(calculador);
         entidadeNova = null;
         this.controle = controle;
+        this.proxEstado = Estado.CHEGADA;
         
         // Display Janela (2)
         
@@ -118,10 +118,8 @@ public class Simulador
         this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE; 
         this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE; 
         
-        // Estatísticas (8)
+        // Estatísticas (6)
         
-        this.numEntidades1 = 0;
-        this.numEntidades2 = 0;
         this.numBloqueios1 = 0;
         this.numBloqueios2 = 0;
         this.numFalhas1 = 0;
@@ -291,6 +289,7 @@ public class Simulador
 				cont++;
 			}
 		}
+		
 		if(cont == 0)
 			par0 = Double.parseDouble(temp);
 		if(cont == 1)
@@ -401,49 +400,151 @@ public class Simulador
         			   // Uniforme
         	return this.tempoAtual + this.calculador.probUniforme(op1, op2);
     }
-
-    public void atualizaEstatisticas() // TODO Fix
+    
+	public void estadoDeChegada()
+	{
+		if(this.tempoAtual == this.proxTempoDeChegada) // Se é tempo de chegada
+        {      	
+        	// Cria entidade nova
+            this.entidadeNova = this.gerador.geraEntidade(this.tipoTs, this.arg0Ts, this.arg1Ts, this.arg2Ts);
+            // Define o próximo evento de chegada
+            this.proxTempoDeChegada = this.gerarTempo(this.tipoTec, this.arg0Tec, this.arg1Tec, this.arg2Tec);
+            
+            // Adiciona entidade nova ao servidor respectivo
+            if(this.entidadeNova.getTipo() == 1) 
+            {
+                this.serv1.adicionaEntidade(entidadeNova);
+                if(this.serv1.estaOcupado() == false && this.serv1.filaEstaVazia() == false) // Se não está ocupado executará
+                	this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual; 
+            }
+            else
+            {
+                this.serv2.adicionaEntidade(entidadeNova);
+                if(this.serv2.estaOcupado() == false && this.serv2.filaEstaVazia() == false) // Se não está ocupado executará
+                	this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual; 
+            }
+        }
+	}
+	
+	public void estadoTerminoServico1()
+	{
+        if(this.tempoAtual == this.proxTempoDeTerminoDeServico1) // Se já é tempo de serviço 1
+        {
+        	this.serv1.acabarServico();
+        	if(this.serv1.filaEstaVazia() == false)
+        		this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico();	
+        	else
+        		this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE;
+        }
+	}
+	
+	public void estadoTerminoServico2()
+	{
+        if(this.tempoAtual == this.proxTempoDeTerminoDeServico2) // Se já é tempo de serviço 2
+        {
+        	this.serv2.acabarServico();
+        	if(this.serv2.filaEstaVazia() == false)
+        		this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico();
+        	else
+        		this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE;
+        }
+	}
+	
+    public void simulacao() // TODO Simulação
+    {
+    	
+    	System.out.println("*************BEFORE***************");
+    	System.out.println("Tempo Atual: " + this.tempoAtual);
+    	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
+    	System.out.println("Prox tempo término de serviço 1: " + this.proxTempoDeTerminoDeServico1);
+    	System.out.println("Prox tempo término de serviço 2: " + this.proxTempoDeTerminoDeServico2);
+    	System.out.println("ESTADO QUE IRÁ ACONTECER AGORA: " + this.proxEstado);
+    	
+        if(this.tempoAtual <= this.tempoFinal) // Se ainda tem tempo de simulação, entra
+        {
+        	
+        	switch(this.proxEstado) // Determinar o estado
+        	{
+			case CHEGADA : this.estadoDeChegada();
+				break;
+			case TERMINO_SERVICO_1 : this.estadoTerminoServico1();
+				break;
+			case TERMINO_SERVICO_2 : this.estadoTerminoServico2();
+				break;
+			default: System.err.println("ERRO Switch Case!");
+				break;
+			}
+        	   
+            // Após a execução do estado atual, determina o seguinte
+            
+            // TEMPO É DISCRETO, AVANÇA PARA PRÓXIMO EVENTO, pega o evento seguinte de menor tempo
+        	
+        	// Caso base
+            tempoAtual = proxTempoDeChegada; 
+            this.proxEstado = Estado.CHEGADA;
+            
+            if(tempoAtual > proxTempoDeTerminoDeServico1)
+            {
+            	tempoAtual = proxTempoDeTerminoDeServico1;
+            	this.proxEstado = Estado.TERMINO_SERVICO_1;
+            }
+       
+            if(tempoAtual > proxTempoDeTerminoDeServico2)
+            {
+            	tempoAtual = proxTempoDeTerminoDeServico2;
+            	this.proxEstado = Estado.TERMINO_SERVICO_2;
+            }
+            
+            /*
+            
+            if(tempoAtual > proxTempoDeFalha1)
+            	tempoAtual = proxTempoDeFalha1;
+            
+            if(tempoAtual > proxTempoDeFalha2)
+            	tempoAtual = proxTempoDeFalha2;
+            
+            if(tempoAtual > proxTempoDeReinicio1)
+            	tempoAtual = proxTempoDeReinicio1;
+            
+            if(tempoAtual > proxTempoDeReinicio2)
+            	tempoAtual = proxTempoDeReinicio2;
+            	
+            */
+            
+            System.out.println("************AFTER***************");
+        	System.out.println("Tempo Atual: " + this.tempoAtual);
+        	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
+        	System.out.println("Prox tempo término de serviço 1: " + this.proxTempoDeTerminoDeServico1);
+        	System.out.println("Prox tempo término de serviço 2: " + this.proxTempoDeTerminoDeServico2);
+        	System.out.println("ESTADO QUE IRÁ ACONTECER A SEGUIR: " + this.proxEstado);
+        	
+            
+            this.atualizaEstatisticas(); 
+        }
+        else // senão tem mais tempo, simulação acaba  
+        	this.controle.encerrarSimulacao();
+    }
+    
+    public void atualizaEstatisticas() // TODO Estatísticas
     {
     	ArrayList<Double> estatisticas = new ArrayList<Double>();
     	
-    	Double d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14,
+    	Double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14,
     		   d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
     	
-    	/*
+    	estatisticas.add(this.tempoAtual); // Manda tempo atual no primeiro slot
+    	d1 = this.serv1.getEntidadesQueEntraram();
+    	d2 = this.serv2.getEntidadesQueEntraram();
+    	d3 = this.serv1.getEntidadesQueSairam();
+    	d4 = this.serv2.getEntidadesQueSairam();
     	
-        d0 = this.calculador.mediaPonderada(this.serv1.getFilaDeEstados(), this.tempoAtual); //Número Médio de Entidades nas Filas 1.
-        d1 = this.calculador.mediaPonderada(this.serv2.getFilaDeEstados(), this.tempoAtual); //Número Médio de Entidades nas Filas 2.
-        d2 = this.calculador.mediaPonderadaTotal(this.serv1.getFilaDeEstados(),this.serv2.getFilaDeEstados(), this.tempoAtual); //Número Médio de Entidades nas Filas Total.
-        d3 = this.calculador.taxaMediaOcupacao(this.tempoOcupado1, this.tempoAtivo1); //Taxa Média de Ocupação dos Servidores 1.
-        d4 = this.calculador.taxaMediaOcupacao(this.tempoOcupado2, this.tempoAtivo2); //Taxa Média de Ocupação dos Servidores 2.
-        d5 = this.calculador.tempoMedioEmFila(this.tempoEmFila1, this.tempoAtual); //Tempo Médio de uma Entidade na Fila 1.
-        d6 = this.calculador.tempoMedioEmFila(this.tempoEmFila2, this.tempoAtual); //Tempo Médio de uma Entidade na Fila 2.
-        d7 = this.calculador.tempoEmFalha(this.tempoFalha1, this.tempoAtual); //Tempo Medio em falha 1
-        d8 = this.calculador.tempoEmFalha(this.tempoFalha2, this.tempoAtual); //Tempo Medio em falha 2
-        d9 = this.calculador.tempoMedioNoSistema(tempoEmFila1,tempoOcupado1,tempoAtual); //Tempo Médio no Sistema 1.
-        d10 = this.calculador.tempoMedioNoSistema(tempoEmFila2,tempoOcupado2,tempoAtual); //Tempo Médio no Sistema 2.
-        d11 = this.calculador.tempoMedioNoSistema((tempoEmFila1+tempoEmFila2),(tempoOcupado1+tempoOcupado2),tempoAtual); //Tempo Médio no Sistema Total.
-        d12 = (double) this.numEntidades1; //Contador de Entidades 1.
-		d13 = (double) this.numEntidades2; //Contador de Entidades 2.
-		d14 = (double) this.numEntidades1+this.numEntidades2; //Contador de Entidades Total.
-		d15 = (double) this.serv1.getEntidadesSaida(); //Contador de Entidades Sairam 1.
-		d16 = (double) this.serv2.getEntidadesSaida(); //Contador de Entidades Sairam 2.
-		d17 = (double) this.serv1.getEntidadesSaida()+this.serv2.getEntidadesSaida(); //Contador de Entidades Sairam Total.
-		d18 = (double) this.numeroEntidades1 - serv1.getEntidadesSaida(); //Contador de Entidades 1 no Sistema.
-		d19 = (double) this.numeroEntidades2 - serv2.getEntidadesSaida(); //Contador de Entidades 2 no Sistema.
-		d20 = (double) this.numeroEntidades1+ numeroEntidades2 - (serv1.getEntidadesSaida()+serv2.getEntidadesSaida()); //Contador de Entidades Total no Sistema.
-		d21 = (double) this.numFalhas1; //Contador numero de Falhas 1.
-		d22 = (double) this.numFalhas2; //Contador numero de Falhas 2.
-		d23 = (double) this.numTrocas1; //Numero Trocas 1.
-		d24 = (double) this.numTrocas2; // Número Trocas 2.
-		d25 = (double) this.numBloqueios1; //Numero Bloqueados 1.
-		d26 = (double) this.numBloqueios1; //Numero Bloqueados 2.
-		
-    	estatisticas.add(d0);
     	estatisticas.add(d1);
     	estatisticas.add(d2);
     	estatisticas.add(d3);
     	estatisticas.add(d4);
+    	
+    	/*
+
     	estatisticas.add(d5);
     	estatisticas.add(d6);
     	estatisticas.add(d7);
@@ -465,64 +566,10 @@ public class Simulador
     	estatisticas.add(d23);
     	estatisticas.add(d24);
     	estatisticas.add(d25);
-    	estatisticas.add(d26);
-    	estatisticas.add(this.tempoAtual); // Manda tempo atual no último slot
-    	
+    	estatisticas.add(d26);	
     	*/
     	
-    	//this.controle.atualizaEstatisticas(estatisticas);
-    } 
-    
-    public void simulacao() // TODO CONSERTAR
-    {
-        if(this.tempoAtual <= this.tempoFinal) // Se ainda tem tempo de simulação, entra
-        {
-            if(this.tempoAtual == this.proxTempoDeChegada) // Se é tempo de chegada
-            {
-            	// Cria entidade nova
-                this.entidadeNova = this.gerador.geraEntidade(this.tipoTs, this.arg0Ts, this.arg1Ts, this.arg2Ts);
-                
-                if (this.entidadeNova.getTipo() == 1) 
-                {
-                    ++this.numEntidades1;
-                    this.serv1.getFilaEntidades().add(entidadeNova);
-                }
-                else
-                {
-                    ++this.numEntidades2;
-                    this.serv2.getFilaEntidades().add(entidadeNova);
-                }
-                
-                // Define o próximo evento de chegada
-                this.proxTempoDeChegada = this.gerarTempo(this.tipoTec, this.arg0Tec, this.arg1Tec, this.arg2Tec);
-                
-            }
-            
-            
-            //System.out.println("SERV1 ATIVO?" + serv1.estaAtivo());
-            //System.out.println("SERV2 ATIVO?" + serv2.estaAtivo());
-            //System.out.println("SERV1 OCUPADO?" + serv1.estaOcupado());
-            //System.out.println("SERV2 OCUPADO?" + serv2.estaOcupado());
-            
-            // TEMPO É DISCRETO, AVANÇA PARA PRÓXIMO EVENTO, pega o evento seguinte de menor tempo
-            
-            tempoAtual = proxTempoDeChegada; // Caso base
-            if(tempoAtual > proxTempoDeFalha1)
-            	tempoAtual = proxTempoDeFalha1;
-            
-            if(tempoAtual > proxTempoDeFalha2)
-            	tempoAtual = proxTempoDeFalha2;
-            
-            if(tempoAtual > proxTempoDeReinicio1)
-            	tempoAtual = proxTempoDeReinicio1;
-            
-            if(tempoAtual > proxTempoDeReinicio2)
-            	tempoAtual = proxTempoDeReinicio2;
-            
-            this.atualizaEstatisticas(); 
-        }
-        else // senão tem mais tempo, simulação acaba  
-        	this.controle.encerrarSimulacao();
+    	this.controle.atualizaEstatisticas(estatisticas);
     }
     
 }

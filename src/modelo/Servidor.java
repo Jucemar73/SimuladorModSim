@@ -1,19 +1,24 @@
 package modelo;
 
 import java.util.ArrayList;
-import modelo.Entidade;
 
 public class Servidor 
 {
 	private ArrayList<Entidade> filaEntidades;
-	private int entidadesQueEntraram;
-	private int entidadesQueSairam;
+	private double entidadesQueEntraram;
+	private double entidadesQueSairam;
+	private boolean ocupado;
+	private boolean quebrado;
+	private String nome;
 	
-	public Servidor()
+	public Servidor(String nome)
 	{
 		this.filaEntidades = new ArrayList<Entidade>();
 		this.entidadesQueEntraram = 0;
 		this.entidadesQueSairam = 0;
+		this.ocupado = false;
+		this.quebrado = false;
+		this.nome = nome;
 	}
 	
 	public ArrayList<Entidade> getFilaEntidades()
@@ -21,13 +26,55 @@ public class Servidor
 		return this.filaEntidades;
 	}
 	
-	public int getEntidadesQueEntraram()
+	public double getEntidadesQueEntraram()
 	{
 		return this.entidadesQueEntraram;
 	}
 	
-	public int getEntidadesQueSairam()
+	public double getEntidadesQueSairam()
 	{
 		return this.entidadesQueSairam;
+	}
+	
+	public String getNome()
+	{
+		return this.nome;
+	}
+	
+	public boolean estaOcupado()
+	{
+		return this.ocupado;
+	}
+	
+	public boolean estaQuebrado()
+	{
+		return this.quebrado;
+	}
+	
+	public boolean filaEstaVazia()
+	{
+		boolean resultado = false;
+		if(this.filaEntidades.size() == 0)
+			resultado = true;
+		return resultado;
+	}
+	
+	public void adicionaEntidade(Entidade ent)
+	{
+		this.filaEntidades.add(ent);
+		this.entidadesQueEntraram++;
+	}
+
+	public double executarServico() 
+	{
+		this.ocupado = true;
+		return this.filaEntidades.get(0).getTempoDeServico();
+	}
+	
+	public void acabarServico()
+	{
+		this.ocupado = false;
+		this.filaEntidades.remove(0);
+		this.entidadesQueSairam++;
 	}
 }
