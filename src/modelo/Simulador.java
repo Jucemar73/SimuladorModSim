@@ -432,7 +432,7 @@ public class Simulador
         {
         	this.serv1.acabarServico();
         	if(this.serv1.filaEstaVazia() == false)
-        		this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico();	
+        		this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual;	
         	else
         		this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE;
         }
@@ -444,23 +444,34 @@ public class Simulador
         {
         	this.serv2.acabarServico();
         	if(this.serv2.filaEstaVazia() == false)
-        		this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico();
+        		this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual;
         	else
         		this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE;
         }
 	}
 	
+	public void estadoFalha1()
+	{
+		
+	}
+	
+	public void estadoFalha2()
+	{
+		
+	}
+	
     public void simulacao() // TODO Simulação
     {
-    	
+    	/*
     	System.out.println("*************BEFORE***************");
     	System.out.println("Tempo Atual: " + this.tempoAtual);
     	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
     	System.out.println("Prox tempo término de serviço 1: " + this.proxTempoDeTerminoDeServico1);
     	System.out.println("Prox tempo término de serviço 2: " + this.proxTempoDeTerminoDeServico2);
     	System.out.println("ESTADO QUE IRÁ ACONTECER AGORA: " + this.proxEstado);
+    	*/
     	
-        if(this.tempoAtual <= this.tempoFinal) // Se ainda tem tempo de simulação, entra
+        if(this.tempoAtual < this.tempoFinal) // Se ainda tem tempo de simulação, entra
         {
         	
         	switch(this.proxEstado) // Determinar o estado
@@ -471,6 +482,10 @@ public class Simulador
 				break;
 			case TERMINO_SERVICO_2 : this.estadoTerminoServico2();
 				break;
+			case FALHA_1 : this.estadoFalha1();
+				break;
+			case FALHA_2 : this.estadoFalha2();
+				break;
 			default: System.err.println("ERRO Switch Case!");
 				break;
 			}
@@ -480,18 +495,23 @@ public class Simulador
             // TEMPO É DISCRETO, AVANÇA PARA PRÓXIMO EVENTO, pega o evento seguinte de menor tempo
         	
         	// Caso base
-            tempoAtual = proxTempoDeChegada; 
-            this.proxEstado = Estado.CHEGADA;
+        	this.tempoAtual = this.tempoFinal;
+        	
+        	if(this.tempoAtual > this.proxTempoDeChegada)
+        	{
+        		this.tempoAtual = this.proxTempoDeChegada; 
+        		this.proxEstado = Estado.CHEGADA;
+        	}
             
-            if(tempoAtual > proxTempoDeTerminoDeServico1)
+            if(this.tempoAtual > this.proxTempoDeTerminoDeServico1)
             {
-            	tempoAtual = proxTempoDeTerminoDeServico1;
+            	this.tempoAtual = this.proxTempoDeTerminoDeServico1;
             	this.proxEstado = Estado.TERMINO_SERVICO_1;
             }
        
-            if(tempoAtual > proxTempoDeTerminoDeServico2)
+            if(this.tempoAtual > this.proxTempoDeTerminoDeServico2)
             {
-            	tempoAtual = proxTempoDeTerminoDeServico2;
+            	this.tempoAtual = this.proxTempoDeTerminoDeServico2;
             	this.proxEstado = Estado.TERMINO_SERVICO_2;
             }
             
@@ -530,7 +550,7 @@ public class Simulador
     	ArrayList<Double> estatisticas = new ArrayList<Double>();
     	
     	Double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14,
-    		   d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
+    		    d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
     	
     	estatisticas.add(this.tempoAtual); // Manda tempo atual no primeiro slot
     	d1 = this.serv1.getEntidadesQueEntraram();
