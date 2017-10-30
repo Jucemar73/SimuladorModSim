@@ -45,8 +45,8 @@ public class Simulador
     private double proxTempoDeChegada;
     private double proxTempoDeFalha1;
     private double proxTempoDeFalha2;
-    private double proxTempoDeReinicio1;
-    private double proxTempoDeReinicio2;
+    private double proxTempoDeReparo1;
+    private double proxTempoDeReparo2;
     private double proxTempoDeTerminoDeServico1;
     private double proxTempoDeTerminoDeServico2;
     
@@ -113,8 +113,8 @@ public class Simulador
         this.proxTempoDeChegada = 0;
         this.proxTempoDeFalha1 = Double.MAX_VALUE; 
         this.proxTempoDeFalha2 = Double.MAX_VALUE;
-        this.proxTempoDeReinicio1 = Double.MAX_VALUE; 
-        this.proxTempoDeReinicio2 = Double.MAX_VALUE; 
+        this.proxTempoDeReparo1 = Double.MAX_VALUE; 
+        this.proxTempoDeReparo2 = Double.MAX_VALUE; 
         this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE; 
         this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE; 
         
@@ -179,7 +179,7 @@ public class Simulador
     	if(this.unidadeDeTempo == 2) // horas
     		this.tempoFinal = (t * 3600);
     	
-    	this.tempoFinal--;
+    	//this.tempoFinal--;
     	
     	System.out.println("TEMPO FINAL DEFINIDO: " + this.tempoFinal);
     }
@@ -414,14 +414,20 @@ public class Simulador
             if(this.entidadeNova.getTipo() == 1) 
             {
                 this.serv1.adicionaEntidade(entidadeNova);
-                if(this.serv1.estaOcupado() == false && this.serv1.filaEstaVazia() == false) // Se não está ocupado executará
-                	this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual; 
+                // Se não está ocupado nem quebrado executará
+                if(this.serv1.estaOcupado() == false && this.serv1.filaEstaVazia() == false && this.serv1.estaQuebrado() == false) 
+                	this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual;
+                if(this.serv1.estaQuebrado() == false && this.proxTempoDeFalha1 == Double.MAX_VALUE) // Falha inicial
+                	this.proxTempoDeFalha1 = this.gerarTempo(this.tipoTef, arg0Tef, arg1Tef, arg2Tef);
             }
             else
             {
                 this.serv2.adicionaEntidade(entidadeNova);
-                if(this.serv2.estaOcupado() == false && this.serv2.filaEstaVazia() == false) // Se não está ocupado executará
+             // Se não está ocupado nem quebrado executará
+                if(this.serv2.estaOcupado() == false && this.serv2.filaEstaVazia() == false && this.serv2.estaQuebrado() == false) 
                 	this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual; 
+                if(this.serv2.estaQuebrado() == false && this.proxTempoDeFalha2 == Double.MAX_VALUE) // Falha inicial
+                	this.proxTempoDeFalha2 = this.gerarTempo(this.tipoTef, arg0Tef, arg1Tef, arg2Tef);
             }
         }
 	}
@@ -452,12 +458,52 @@ public class Simulador
 	
 	public void estadoFalha1()
 	{
-		
+		if(this.tempoAtual == this.proxTempoDeFalha1) // Se já é hora de falhar o servidor 1
+		{
+			this.serv1.quebrar();
+			this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE; // Não faz serviço enquanto quebrado
+			this.proxTempoDeFalha1 = Double.MAX_VALUE; // Não pode falhar enquanto está falhado
+			this.proxTempoDeReparo1 = this.gerarTempo(tipoTf, arg0Tf, arg1Tf, arg2Tf); // Gera próximo evento de reinício para serv 1
+		}
 	}
 	
 	public void estadoFalha2()
 	{
-		
+		if(this.tempoAtual == this.proxTempoDeFalha2) // Se já é hora de falhar o servidor 2
+		{
+			this.serv2.quebrar();
+			this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE; // Não faz serviço enquanto quebrado
+			this.proxTempoDeFalha2 = Double.MAX_VALUE; // Não pode falhar enquanto está falhado
+			this.proxTempoDeReparo2 = this.gerarTempo(tipoTf, arg0Tf, arg1Tf, arg2Tf); // Gera próximo evento de reinício para serv 2
+		}
+	}
+	
+	public void estadoTerminoFalha1()
+	{
+		if(this.tempoAtual == this.proxTempoDeReparo1) // Se já é tempo de reparar o servidor 1
+		{
+			this.serv1.reparar();
+			if(serv1.getFilaEntidades().size() > 0) // Caso tenha tarefas na fila, encaminha
+				this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual; // Gera evento do próximo final de serviço
+			else
+				this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE;
+			this.proxTempoDeReparo1 = Double.MAX_VALUE; // Não pode reiniciar se funcionando
+			this.proxTempoDeFalha1 = this.gerarTempo(tipoTef, arg0Tef, arg1Tef, arg2Tef);
+		}
+	}
+	
+	public void estadoTerminoFalha2()
+	{
+		if(this.tempoAtual == this.proxTempoDeReparo2) // Se já é tempo de reparar o servidor 2
+		{
+			this.serv2.reparar();
+			if(serv2.getFilaEntidades().size() > 0) // Caso tenha tarefas na fila, encaminha
+				this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual; // Gera evento do próximo final de serviço
+			else
+				this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE;
+			this.proxTempoDeReparo2 = Double.MAX_VALUE; // Não pode reiniciar se funcionando
+			this.proxTempoDeFalha2 = this.gerarTempo(tipoTef, arg0Tef, arg1Tef, arg2Tef);
+		}
 	}
 	
     public void simulacao() // TODO Simulação
@@ -468,6 +514,10 @@ public class Simulador
     	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
     	System.out.println("Prox tempo término de serviço 1: " + this.proxTempoDeTerminoDeServico1);
     	System.out.println("Prox tempo término de serviço 2: " + this.proxTempoDeTerminoDeServico2);
+    	System.out.println("Prox tempo falha serv1: " + this.proxTempoDeFalha1);
+    	System.out.println("Prox tempo falha serv2: " + this.proxTempoDeFalha2);
+    	System.out.println("Prox tempo reparo serv1: " + this.proxTempoDeReparo1);
+    	System.out.println("Prox tempo reparo serv2: " + this.proxTempoDeReparo2);
     	System.out.println("ESTADO QUE IRÁ ACONTECER AGORA: " + this.proxEstado);
     	*/
     	
@@ -485,6 +535,10 @@ public class Simulador
 			case FALHA_1 : this.estadoFalha1();
 				break;
 			case FALHA_2 : this.estadoFalha2();
+				break;
+			case TERMINO_FALHA_1 : this.estadoTerminoFalha1();
+				break;
+			case TERMINO_FALHA_2 : this.estadoTerminoFalha2();
 				break;
 			default: System.err.println("ERRO Switch Case!");
 				break;
@@ -515,29 +569,39 @@ public class Simulador
             	this.proxEstado = Estado.TERMINO_SERVICO_2;
             }
             
-            /*
+            if(this.tempoAtual > this.proxTempoDeFalha1)
+            {
+            	this.tempoAtual = this.proxTempoDeFalha1;
+            	this.proxEstado = Estado.FALHA_1;
+            }
             
-            if(tempoAtual > proxTempoDeFalha1)
-            	tempoAtual = proxTempoDeFalha1;
+            if(this.tempoAtual > this.proxTempoDeFalha2)
+            {
+            	this.tempoAtual = this.proxTempoDeFalha2;
+            	this.proxEstado = Estado.FALHA_2;
+            }
             
-            if(tempoAtual > proxTempoDeFalha2)
-            	tempoAtual = proxTempoDeFalha2;
-            
-            if(tempoAtual > proxTempoDeReinicio1)
-            	tempoAtual = proxTempoDeReinicio1;
-            
-            if(tempoAtual > proxTempoDeReinicio2)
-            	tempoAtual = proxTempoDeReinicio2;
-            	
-            */
+            if(this.tempoAtual > this.proxTempoDeReparo1)
+            {
+            	this.tempoAtual = this.proxTempoDeReparo1;
+            	this.proxEstado = Estado.TERMINO_FALHA_1;
+            }
+            if(this.tempoAtual > this.proxTempoDeReparo2)
+            {
+            	this.tempoAtual = this.proxTempoDeReparo2;
+            	this.proxEstado = Estado.TERMINO_FALHA_2;
+            }
             
             System.out.println("************AFTER***************");
         	System.out.println("Tempo Atual: " + this.tempoAtual);
         	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
         	System.out.println("Prox tempo término de serviço 1: " + this.proxTempoDeTerminoDeServico1);
         	System.out.println("Prox tempo término de serviço 2: " + this.proxTempoDeTerminoDeServico2);
+        	System.out.println("Prox tempo falha serv1: " + this.proxTempoDeFalha1);
+        	System.out.println("Prox tempo falha serv2: " + this.proxTempoDeFalha2);
+        	System.out.println("Prox tempo reparo serv1: " + this.proxTempoDeReparo1);
+        	System.out.println("Prox tempo reparo serv2: " + this.proxTempoDeReparo2);
         	System.out.println("ESTADO QUE IRÁ ACONTECER A SEGUIR: " + this.proxEstado);
-        	
             
             this.atualizaEstatisticas(); 
         }
@@ -557,18 +621,22 @@ public class Simulador
     	d2 = this.serv2.getEntidadesQueEntraram();
     	d3 = this.serv1.getEntidadesQueSairam();
     	d4 = this.serv2.getEntidadesQueSairam();
+    	d5 = this.serv1.getNumeroDeQuebras();
+    	d6 = this.serv2.getNumeroDeQuebras();
+    	d7 = this.serv1.getNumeroDeReparos();
+    	d8 = this.serv2.getNumeroDeReparos();
     	
     	estatisticas.add(d1);
     	estatisticas.add(d2);
     	estatisticas.add(d3);
     	estatisticas.add(d4);
-    	
-    	/*
-
     	estatisticas.add(d5);
     	estatisticas.add(d6);
     	estatisticas.add(d7);
     	estatisticas.add(d8);
+    	
+    	/*
+
     	estatisticas.add(d9);
     	estatisticas.add(d10);
     	estatisticas.add(d11);

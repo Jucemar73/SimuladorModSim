@@ -140,21 +140,25 @@ public class Janela extends JFrame
 	private void atualizaTextoEstatisticas() // TODO Texto estatísticas aqui
 	{
         String texto =    
-        		  "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>"
-        		
-        		+ "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 1: " + this.d1 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 2: " + this.d2 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp Total de entidades que saíram no servidor 1: " + this.d3 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp Total de entidades que saíram no servidor 2: " + this.d4 + " <br/>"
-        		+ "<html> &nbsp&nbsp&nbsp <br/>";
+          "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>"
+        
+        + "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 1: " + this.d1 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 2: " + this.d2 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de entidades que saíram no servidor 1: "   + this.d3 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de entidades que saíram no servidor 2: "   + this.d4 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de falhas no servidor 1: " 				   + this.d5 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de falhas no servidor 2: "				   + this.d6 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de reparos no servidor 1: "				   + this.d7 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Total de reparos no servidor 2: " 			   + this.d8 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp <br/>";
         
 
         this.estatisticas.setText(texto);
@@ -692,15 +696,13 @@ public class Janela extends JFrame
 		this.d2 = estatisticas.get(2);
 		this.d3 = estatisticas.get(3);
 		this.d4 = estatisticas.get(4);
-		
-		/*
-
 		this.d5 = estatisticas.get(5);
 		this.d6 = estatisticas.get(6);
 		this.d7 = estatisticas.get(7);
 		this.d8 = estatisticas.get(8);
-		this.d9 = estatisticas.get(9);
 		
+		/*
+		this.d9 = estatisticas.get(9);
 		this.d10 = estatisticas.get(10);
 		this.d11 = estatisticas.get(11);
 		this.d12 = estatisticas.get(12);

@@ -7,6 +7,8 @@ public class Servidor
 	private ArrayList<Entidade> filaEntidades;
 	private double entidadesQueEntraram;
 	private double entidadesQueSairam;
+	private double numeroDeQuebras;
+	private double numeroDeReparos;
 	private boolean ocupado;
 	private boolean quebrado;
 	private String nome;
@@ -16,6 +18,8 @@ public class Servidor
 		this.filaEntidades = new ArrayList<Entidade>();
 		this.entidadesQueEntraram = 0;
 		this.entidadesQueSairam = 0;
+		this.numeroDeQuebras = 0;
+		this.numeroDeReparos = 0;
 		this.ocupado = false;
 		this.quebrado = false;
 		this.nome = nome;
@@ -34,6 +38,16 @@ public class Servidor
 	public double getEntidadesQueSairam()
 	{
 		return this.entidadesQueSairam;
+	}
+	
+	public double getNumeroDeQuebras()
+	{
+		return this.numeroDeQuebras;
+	}
+	
+	public double getNumeroDeReparos()
+	{
+		return this.numeroDeReparos;
 	}
 	
 	public String getNome()
@@ -76,5 +90,18 @@ public class Servidor
 		this.ocupado = false;
 		this.filaEntidades.remove(0);
 		this.entidadesQueSairam++;
+	}
+	
+	public void quebrar()
+	{
+		this.quebrado = true;
+		this.numeroDeQuebras++;
+		
+	}
+	
+	public void reparar()
+	{
+		this.quebrado = false;
+		this.numeroDeReparos++;
 	}
 }
