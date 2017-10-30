@@ -61,8 +61,7 @@ public class Janela extends JFrame
 	
 	// Estatísticas
 	
-	private double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13;
-	private double d14, d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
+	private double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16;
 	private double tempoAtualSimulacao;
 	private int cicloAtual;
 	
@@ -137,7 +136,7 @@ public class Janela extends JFrame
 		return texto;
 	}
 	
-	private void atualizaTextoEstatisticas() // TODO Texto estatísticas aqui
+	private void atualizaTextoEstatisticas()
 	{
         String texto =    
           "<html> &nbsp&nbsp&nbsp <br/>"
@@ -148,8 +147,8 @@ public class Janela extends JFrame
         + "<html> &nbsp&nbsp&nbsp <br/>"
         + "<html> &nbsp&nbsp&nbsp <br/>"
         + "<html> &nbsp&nbsp&nbsp <br/>"
+        + "<html> &nbsp&nbsp&nbsp Estatísticas: <br/>"
         + "<html> &nbsp&nbsp&nbsp <br/>"
-        
         + "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 1: " + this.d1 + " <br/>"
         + "<html> &nbsp&nbsp&nbsp Total de entidades que entraram no servidor 2: " + this.d2 + " <br/>"
         + "<html> &nbsp&nbsp&nbsp Total de entidades que saíram no servidor 1: "   + this.d3 + " <br/>"
@@ -158,8 +157,15 @@ public class Janela extends JFrame
         + "<html> &nbsp&nbsp&nbsp Total de falhas no servidor 2: "				   + this.d6 + " <br/>"
         + "<html> &nbsp&nbsp&nbsp Total de reparos no servidor 1: "				   + this.d7 + " <br/>"
         + "<html> &nbsp&nbsp&nbsp Total de reparos no servidor 2: " 			   + this.d8 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo médio no sistema de entidades 1: "         + this.d9 + " <br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo médio no sistema de entidades 2: "         + this.d10 + "<br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo médio na fila de entidades 1: "            + this.d11 + "<br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo médio na fila de entidades 2: "            + this.d12 + "<br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo de falha no servidor 1: "                  + this.d13 + "<br/>"
+        + "<html> &nbsp&nbsp&nbsp Tempo de falha no servidor 2: "                  + this.d14 + "<br/>"       
+        + "<html> &nbsp&nbsp&nbsp Percentual de tempo de falha no servidor 1: "    + this.d15 +"%<br/>"
+        + "<html> &nbsp&nbsp&nbsp Percentual de tempo de falha no servidor 2: "    + this.d16 +"%<br/>"
         + "<html> &nbsp&nbsp&nbsp <br/>";
-        
 
         this.estatisticas.setText(texto);
 	}
@@ -212,16 +218,6 @@ public class Janela extends JFrame
 		this.d14 = 0;
 		this.d15 = 0;
 		this.d16 = 0;
-		this.d17 = 0;
-		this.d18 = 0;
-		this.d19 = 0;
-		this.d20 = 0;
-		this.d21 = 0;
-		this.d22 = 0;
-		this.d23 = 0;
-		this.d24 = 0;
-		this.d25 = 0;
-		this.d26 = 0;
 		
 		this.campoTec.setText("");
 		this.campoTs.setText("");
@@ -252,16 +248,6 @@ public class Janela extends JFrame
 		this.d14 = 0;
 		this.d15 = 0;
 		this.d16 = 0;
-		this.d17 = 0;
-		this.d18 = 0;
-		this.d19 = 0;
-		this.d20 = 0;
-		this.d21 = 0;
-		this.d22 = 0;
-		this.d23 = 0;
-		this.d24 = 0;
-		this.d25 = 0;
-		this.d26 = 0;
 		this.tempoAtualSimulacao = 0;
 		
 		this.cicloAtual = 0;
@@ -496,7 +482,7 @@ public class Janela extends JFrame
 		
 		estatisticas = new JLabel();
 		this.atualizaTextoEstatisticas();
-		estatisticas.setFont(new Font("Arial", Font.PLAIN, 12));
+		estatisticas.setFont(new Font("Arial", Font.PLAIN, 16));
 		estatisticas.setForeground(Color.BLACK);
 		estatisticas.setBounds(0, 0, 800, 600);
 		estatisticas.setVisible(false);
@@ -687,7 +673,7 @@ public class Janela extends JFrame
 			this.controle.avanceProximoPasso();
 	}
 	
-	public void atualizaEstatisticas(ArrayList<Double> estatisticas) // TODO estatísticas aqui
+	public void atualizaEstatisticas(ArrayList<Double> estatisticas)
 	{
 		this.cicloAtual++;
 		this.tempoAtualSimulacao = estatisticas.get(0);
@@ -700,8 +686,6 @@ public class Janela extends JFrame
 		this.d6 = estatisticas.get(6);
 		this.d7 = estatisticas.get(7);
 		this.d8 = estatisticas.get(8);
-		
-		/*
 		this.d9 = estatisticas.get(9);
 		this.d10 = estatisticas.get(10);
 		this.d11 = estatisticas.get(11);
@@ -710,19 +694,6 @@ public class Janela extends JFrame
 		this.d14 = estatisticas.get(14);
 		this.d15 = estatisticas.get(15);
 		this.d16 = estatisticas.get(16);
-		this.d17 = estatisticas.get(17);
-		this.d18 = estatisticas.get(18);
-		this.d19 = estatisticas.get(19);
-		
-		this.d20 = estatisticas.get(20);
-		this.d21 = estatisticas.get(21);
-		this.d22 = estatisticas.get(22);
-		this.d23 = estatisticas.get(23);
-		this.d24 = estatisticas.get(24);
-		this.d25 = estatisticas.get(25);
-		this.d26 = estatisticas.get(26);
-		
-		*/
 		
 		this.atualizaTextoEstatisticas();
 		this.labelCicloAtual.setText(this.definaTextoCicloAtual());

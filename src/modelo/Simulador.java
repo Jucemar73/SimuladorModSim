@@ -51,24 +51,20 @@ public class Simulador
     private double proxTempoDeTerminoDeServico2;
     
     // Estatísticas (6)
+
+    private ArrayList<Double> stat1; // Tempo que entidades tipo 1 levaram para percorrer o sistema
+    private ArrayList<Double> stat2; // Tempo que entidades tipo 2 levaram para percorrer o sistema
+    private ArrayList<Double> stat3; // Tempo que entidades tipo 1 ficaram na fila
+    private ArrayList<Double> stat4; // Tempo que entidades tipo 2 ficaram na fila
+    private double stat5;			 // Tempo que serv1 ficou em falha
+    private double stat6;			 // Tempo que serv2 ficou em falha
     
-    private int numBloqueios1; // Número total de entidades tipo 1 bloqueadas.
-    private int numBloqueios2; // Número total de entidades tipo 2 bloqueadas.
-    private int numFalhas1;    // Número total de falhas do serv1.
-    private int numFalhas2;    // Número total de falhas do serv2.
-    private int numTrocas1;    // Número total de trocas tipo 1.
-    private int numTrocas2;    // Número total de trocas tipo 2.
-    
-    // Tempo
+    // Tempo (4)
     
     private double tempoAtual;    // Tempo atual da simulação
     private double tempoFinal;    // Tempo final da simulação (máximo)
-    private double tempoOcupado1; // Tempo total que o serv1 ficou ocupado
-    private double tempoOcupado2; // Tempo total que o serv2 ficou ocupado
-    private double tempoAtivo1;   // Tempo total que o serv1 ficou ativo
-    private double tempoAtivo2;   // Tempo total que o serv2 ficou ativo
-    private double tempoFalha1;   // Tempo total que o serv1 ficou falhado
-    private double tempoFalha2;   // Tempo total que o serv2 ficou falhado
+    private double tempoDaUltimaFalha1;
+    private double tempoDaUltimaFalha2;
     
     // Construtor
     
@@ -119,24 +115,20 @@ public class Simulador
         this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE; 
         
         // Estatísticas (6)
+
+        this.stat1 = new ArrayList<Double>();
+        this.stat2 = new ArrayList<Double>();
+        this.stat3 = new ArrayList<Double>();
+        this.stat4 = new ArrayList<Double>();
+        this.stat5 = 0;
+        this.stat6 = 0;
         
-        this.numBloqueios1 = 0;
-        this.numBloqueios2 = 0;
-        this.numFalhas1 = 0;
-        this.numFalhas2 = 0;
-        this.numTrocas1 = 0;
-        this.numTrocas2 = 0;
-        
-        // Tempo (8)
+        // Tempo (4)
         
         this.tempoAtual = 0;
         this.tempoFinal = 0;
-        this.tempoOcupado1 = 0;
-        this.tempoOcupado2 = 0;
-        this.tempoAtivo1 = 0;
-        this.tempoAtivo2 = 0;
-        this.tempoFalha1 = 0;
-        this.tempoFalha2 = 0;
+        this.tempoDaUltimaFalha1 = 0;
+        this.tempoDaUltimaFalha2 = 0;
     }
 
     // Gets
@@ -406,7 +398,7 @@ public class Simulador
 		if(this.tempoAtual == this.proxTempoDeChegada) // Se é tempo de chegada
         {      	
         	// Cria entidade nova
-            this.entidadeNova = this.gerador.geraEntidade(this.tipoTs, this.arg0Ts, this.arg1Ts, this.arg2Ts);
+            this.entidadeNova = this.gerador.geraEntidade(this.tipoTs, this.arg0Ts, this.arg1Ts, this.arg2Ts, this.tempoAtual);
             // Define o próximo evento de chegada
             this.proxTempoDeChegada = this.gerarTempo(this.tipoTec, this.arg0Tec, this.arg1Tec, this.arg2Tec);
             
@@ -436,9 +428,13 @@ public class Simulador
 	{
         if(this.tempoAtual == this.proxTempoDeTerminoDeServico1) // Se já é tempo de serviço 1
         {
+        	this.stat1.add(this.tempoAtual - this.serv1.getFilaEntidades().get(0).getTempoQueEntrouNoSistema());
         	this.serv1.acabarServico();
         	if(this.serv1.filaEstaVazia() == false)
+        	{
+        		this.stat3.add(this.tempoAtual - this.serv1.getFilaEntidades().get(0).getTempoQueEntrouNoSistema());
         		this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual;	
+        	}
         	else
         		this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE;
         }
@@ -448,9 +444,13 @@ public class Simulador
 	{
         if(this.tempoAtual == this.proxTempoDeTerminoDeServico2) // Se já é tempo de serviço 2
         {
+        	this.stat2.add(this.tempoAtual - this.serv2.getFilaEntidades().get(0).getTempoQueEntrouNoSistema());
         	this.serv2.acabarServico();
         	if(this.serv2.filaEstaVazia() == false)
+        	{
+        		this.stat4.add(this.tempoAtual - this.serv2.getFilaEntidades().get(0).getTempoQueEntrouNoSistema());
         		this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual;
+        	}
         	else
         		this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE;
         }
@@ -460,6 +460,7 @@ public class Simulador
 	{
 		if(this.tempoAtual == this.proxTempoDeFalha1) // Se já é hora de falhar o servidor 1
 		{
+			this.tempoDaUltimaFalha1 = this.tempoAtual;
 			this.serv1.quebrar();
 			this.proxTempoDeTerminoDeServico1 = Double.MAX_VALUE; // Não faz serviço enquanto quebrado
 			this.proxTempoDeFalha1 = Double.MAX_VALUE; // Não pode falhar enquanto está falhado
@@ -471,6 +472,7 @@ public class Simulador
 	{
 		if(this.tempoAtual == this.proxTempoDeFalha2) // Se já é hora de falhar o servidor 2
 		{
+			this.tempoDaUltimaFalha2 = this.tempoAtual;
 			this.serv2.quebrar();
 			this.proxTempoDeTerminoDeServico2 = Double.MAX_VALUE; // Não faz serviço enquanto quebrado
 			this.proxTempoDeFalha2 = Double.MAX_VALUE; // Não pode falhar enquanto está falhado
@@ -482,6 +484,7 @@ public class Simulador
 	{
 		if(this.tempoAtual == this.proxTempoDeReparo1) // Se já é tempo de reparar o servidor 1
 		{
+			this.stat5 += this.tempoAtual - this.tempoDaUltimaFalha1;
 			this.serv1.reparar();
 			if(serv1.getFilaEntidades().size() > 0) // Caso tenha tarefas na fila, encaminha
 				this.proxTempoDeTerminoDeServico1 = this.serv1.executarServico() + this.tempoAtual; // Gera evento do próximo final de serviço
@@ -496,6 +499,7 @@ public class Simulador
 	{
 		if(this.tempoAtual == this.proxTempoDeReparo2) // Se já é tempo de reparar o servidor 2
 		{
+			this.stat6 += this.tempoAtual - this.tempoDaUltimaFalha2;
 			this.serv2.reparar();
 			if(serv2.getFilaEntidades().size() > 0) // Caso tenha tarefas na fila, encaminha
 				this.proxTempoDeTerminoDeServico2 = this.serv2.executarServico() + this.tempoAtual; // Gera evento do próximo final de serviço
@@ -506,7 +510,7 @@ public class Simulador
 		}
 	}
 	
-    public void simulacao() // TODO Simulação
+    public void simulacao()
     {
     	/*
     	System.out.println("*************BEFORE***************");
@@ -592,6 +596,7 @@ public class Simulador
             	this.proxEstado = Estado.TERMINO_FALHA_2;
             }
             
+            /*
             System.out.println("************AFTER***************");
         	System.out.println("Tempo Atual: " + this.tempoAtual);
         	System.out.println("Prox tempo chegada: " + this.proxTempoDeChegada);
@@ -602,6 +607,7 @@ public class Simulador
         	System.out.println("Prox tempo reparo serv1: " + this.proxTempoDeReparo1);
         	System.out.println("Prox tempo reparo serv2: " + this.proxTempoDeReparo2);
         	System.out.println("ESTADO QUE IRÁ ACONTECER A SEGUIR: " + this.proxEstado);
+            */
             
             this.atualizaEstatisticas(); 
         }
@@ -613,8 +619,7 @@ public class Simulador
     {
     	ArrayList<Double> estatisticas = new ArrayList<Double>();
     	
-    	Double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14,
-    		    d15, d16, d17, d18, d19, d20, d21, d22, d23, d24, d25, d26;
+    	Double d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16;
     	
     	estatisticas.add(this.tempoAtual); // Manda tempo atual no primeiro slot
     	d1 = this.serv1.getEntidadesQueEntraram();
@@ -625,7 +630,15 @@ public class Simulador
     	d6 = this.serv2.getNumeroDeQuebras();
     	d7 = this.serv1.getNumeroDeReparos();
     	d8 = this.serv2.getNumeroDeReparos();
-    	
+    	d9 = this.calculador.mediaAritmeticaLista(this.stat1);  // Tempo médio no sistema de entidades 1 
+    	d10 = this.calculador.mediaAritmeticaLista(this.stat2); // Tempo médio no sistema de entidades 2 
+    	d11 = this.calculador.mediaAritmeticaLista(this.stat3); // Média do tempo de entidade na fila 1
+    	d12 = this.calculador.mediaAritmeticaLista(this.stat4); // Média do tempo de entidade na fila 2
+    	d13 = this.stat5; // Tempo total de falha do servidor 1
+    	d14 = this.stat6; // Tempo total de falha do servidor 2
+    	d15 = this.stat5 / this.tempoAtual; // Percentual de falha do servidor 1
+    	d16 = this.stat6 / this.tempoAtual; // Percentual de falha do servidor 2
+	
     	estatisticas.add(d1);
     	estatisticas.add(d2);
     	estatisticas.add(d3);
@@ -634,9 +647,6 @@ public class Simulador
     	estatisticas.add(d6);
     	estatisticas.add(d7);
     	estatisticas.add(d8);
-    	
-    	/*
-
     	estatisticas.add(d9);
     	estatisticas.add(d10);
     	estatisticas.add(d11);
@@ -645,17 +655,6 @@ public class Simulador
     	estatisticas.add(d14);
     	estatisticas.add(d15);
     	estatisticas.add(d16);
-    	estatisticas.add(d17);
-    	estatisticas.add(d18);
-    	estatisticas.add(d19);
-    	estatisticas.add(d20);
-    	estatisticas.add(d21);
-    	estatisticas.add(d22);
-    	estatisticas.add(d23);
-    	estatisticas.add(d24);
-    	estatisticas.add(d25);
-    	estatisticas.add(d26);	
-    	*/
     	
     	this.controle.atualizaEstatisticas(estatisticas);
     }

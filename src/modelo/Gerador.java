@@ -12,7 +12,7 @@ public class Gerador
     	this.calculador = calc;
     }
 
-    public Entidade geraEntidade(int mode, double op1, double op2, double op3) 
+    public Entidade geraEntidade(int mode, double op1, double op2, double op3, double tempoAtual) 
     {
         int tipo = 1;
         if (Math.random() >= 0.5) 
@@ -24,6 +24,6 @@ public class Gerador
         		 : (mode == 3 ? this.calculador.probTriangular(op1, op2, op3) 
         		 : 				this.calculador.probUniforme(op1, op2))));
         
-        return new Entidade(tipo, ts);
+        return new Entidade(tipo, ts, tempoAtual);
     }
 }
